@@ -1,7 +1,7 @@
-export function formatearHora(iso: string, idioma: string): string {
+export function formatearHora(iso: string): string {
   const fecha = new Date(iso)
   if (Number.isNaN(fecha.getTime())) return ''
-  return new Intl.DateTimeFormat(idioma === 'en' ? 'en-US' : 'es-PE', {
+  return new Intl.DateTimeFormat('es-PE', {
     hour: '2-digit',
     minute: '2-digit',
   }).format(fecha)

@@ -2,7 +2,6 @@ import { URL_API, usarMock } from '../config'
 import type {
   CrearPedido,
   EstadoPedido,
-  Idioma,
   MenuRespuesta,
   Mesa,
   Pedido,
@@ -57,9 +56,9 @@ function query(params: Record<string, string | undefined>): string {
 }
 
 export const api = {
-  menu(idioma: Idioma): Promise<MenuRespuesta> {
-    if (usarMock) return menuMock(idioma)
-    return solicitar(`/api/menu${query({ lang: idioma })}`)
+  menu(): Promise<MenuRespuesta> {
+    if (usarMock) return menuMock()
+    return solicitar('/api/menu?lang=es')
   },
   mesas(): Promise<Mesa[]> {
     if (usarMock) return mesasMock()

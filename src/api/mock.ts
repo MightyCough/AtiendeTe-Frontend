@@ -100,7 +100,7 @@ function semilla(): BaseDatos {
     }),
     armarPedido(3, {
       mesa: 5,
-      idioma: 'en',
+      idioma: 'es',
       estado: 'LISTO',
       creadoEn: hace(35),
       items: [{ productoId: 6, cantidad: 1, adicionales: [], sinIngredientes: [204] }],
@@ -128,12 +128,12 @@ function armarItem(
   const adicionales = adicionalesIds.map((id) => {
     const extra = producto.adicionales.find((item) => item.id === id)
     if (!extra) throw new ErrorApi(400, 'Adicional desconocido')
-    return { id: extra.id, nombre: extra.nombre.es, precioExtra: extra.precioExtra }
+    return { id: extra.id, nombre: extra.nombre, precioExtra: extra.precioExtra }
   })
   const sinIngredientes = sinIds.map((id) => {
     const ingrediente = producto.ingredientesRemovibles.find((item) => item.id === id)
     if (!ingrediente) throw new ErrorApi(400, 'Ingrediente desconocido')
-    return { id: ingrediente.id, nombre: ingrediente.nombre.es }
+    return { id: ingrediente.id, nombre: ingrediente.nombre }
   })
   const subtotal = precioLinea(
     producto.precio,
@@ -142,7 +142,7 @@ function armarItem(
   )
   return {
     productoId,
-    nombre: producto.nombre.es,
+    nombre: producto.nombre,
     cantidad,
     precioUnitario: producto.precio,
     adicionales,
@@ -267,9 +267,9 @@ export function reiniciarMock(): void {
   window.location.reload()
 }
 
-export async function menuMock(idioma: Idioma): Promise<MenuRespuesta> {
+export async function menuMock(): Promise<MenuRespuesta> {
   await esperar()
-  return localizarMenu(idioma === 'en' ? 'en' : 'es')
+  return localizarMenu()
 }
 
 export async function mesasMock(): Promise<Mesa[]> {
@@ -306,7 +306,7 @@ export async function crearPedidoMock(cuerpo: CrearPedido): Promise<Pedido> {
   const pedido: Pedido = {
     id: db.seq,
     mesa: cuerpo.mesa,
-    idioma: cuerpo.idioma === 'en' ? 'en' : 'es',
+    idioma: 'es',
     estado: 'RECIBIDO',
     total: desdeCentimos(items.reduce((suma, item) => suma + aCentimos(item.subtotal), 0)),
     items,

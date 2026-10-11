@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { useSesionIdioma } from './hooks/useSesionIdioma'
 import { AdminPagina } from './paginas/Admin'
 import { CocinaPagina } from './paginas/Cocina'
 import { InicioPagina } from './paginas/Inicio'
@@ -9,9 +8,6 @@ import { PedidoPagina } from './paginas/Pedido'
 import { QrPagina } from './paginas/QrMesas'
 
 export function App() {
-  const listo = useSesionIdioma()
-  if (!listo) return <div className="min-h-dvh" />
-
   return (
     <BrowserRouter>
       <Routes>

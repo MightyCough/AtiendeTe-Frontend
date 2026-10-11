@@ -5,10 +5,8 @@ import { api } from '../api/cliente'
 import { ErrorApi } from '../api/errores'
 import { useEvento } from '../hooks/useEvento'
 import { agregarLinea, cambiarCantidad, quitarLinea, sincronizarNombres, totalCarrito } from '../lib/carrito'
-import { idiomaActivo, guardarIdioma, leerIdioma } from '../lib/idioma'
 import { interpretarMesa } from '../lib/mesa'
 import type { Categoria, LineaCarrito, Mesa, Producto } from '../tipos'
-import { Bienvenida } from './menu/Bienvenida'
 import { CarritoPanel } from './menu/CarritoPanel'
 import { Carta } from './menu/Carta'
 import { DetalleProducto } from './menu/DetalleProducto'
@@ -37,10 +35,8 @@ export function MenuPagina() {
 }
 
 function ExperienciaMesa({ numero }: { numero: number }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
-  const idioma = idiomaActivo(i18n.language)
-  const [bienvenida, setBienvenida] = useState(() => leerIdioma() === null)
   const [mesa, setMesa] = useState<Mesa | null>(null)
   const [ausente, setAusente] = useState(false)
   const [categorias, setCategorias] = useState<Categoria[] | null>(null)
@@ -84,7 +80,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
   useEffect(() => {
     let vivo = true
     api
-      .menu(idioma)
+      .menu()
       .then((datos) => {
         if (!vivo) return
         setCategorias(datos.categorias)
@@ -100,7 +96,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
     return () => {
       vivo = false
     }
-  }, [idioma, intento])
+  }, [intento])
 
   useEvento('mesa:conexion', (dato) => {
     if (dato.numero !== numero) return
@@ -136,18 +132,6 @@ function ExperienciaMesa({ numero }: { numero: number }) {
         <div className="h-52 animate-pulse rounded-3xl bg-linea" />
         <div className="h-52 animate-pulse rounded-3xl bg-linea" />
       </main>
-    )
-  }
-
-  if (bienvenida) {
-    return (
-      <Bienvenida
-        numero={numero}
-        onElegir={(elegido) => {
-          void guardarIdioma(elegido)
-          setBienvenida(false)
-        }}
-      />
     )
   }
 
@@ -198,7 +182,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
             void api
               .crearPedido({
                 mesa: numero,
-                idioma,
+                idioma: 'es',
                 items: lineas.map((linea) => ({
                   productoId: linea.productoId,
                   cantidad: linea.cantidad,
