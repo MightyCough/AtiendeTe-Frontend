@@ -1,8 +1,4 @@
 export const es = {
-  idioma: {
-    es: 'Español',
-    en: 'Inglés',
-  },
   comun: {
     cargando: 'Cargando…',
     reintentar: 'Reintentar',
@@ -37,8 +33,6 @@ export const es = {
     inicio: 'Ir al inicio',
   },
   menu: {
-    bienvenida: 'Bienvenido a tu mesa',
-    eligeIdioma: 'Elige tu idioma',
     mesa: 'Mesa {{numero}}',
     conectada: 'Mesa conectada',
     desconectada: 'Mesa sin conexión',
@@ -128,7 +122,6 @@ export const es = {
     imprimir: 'Imprimir',
     volver: 'Volver a administración',
     escanear: 'Escanea para pedir',
-    escanearEn: 'Scan to order',
     mesa: 'Mesa {{numero}}',
     invalida: 'La dirección debe empezar con http:// o https://',
   },
@@ -137,13 +130,4 @@ export const es = {
     texto: 'Revisa el enlace o vuelve al inicio.',
     volver: 'Volver al inicio',
   },
-}
-
-/** Misma forma que el español, con textos libres en el otro idioma. */
-export type Traduccion = {
-  [Clave in keyof typeof es]: (typeof es)[Clave] extends string ? string : TraduccionAnidada<(typeof es)[Clave]>
-}
-
-type TraduccionAnidada<T> = {
-  [Clave in keyof T]: T[Clave] extends string ? string : TraduccionAnidada<T[Clave]>
 }

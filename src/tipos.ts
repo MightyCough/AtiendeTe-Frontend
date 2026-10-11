@@ -103,7 +103,7 @@ export interface ConexionMesa {
   online: boolean
 }
 
-/** Línea del carrito en el teléfono. Los nombres siguen el idioma de la pantalla. */
+/** Línea del carrito en el teléfono. Los nombres están en español, igual que la carta. */
 export interface LineaCarrito {
   clave: string
   productoId: number

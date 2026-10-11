@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { api } from '../api/cliente'
 import { reiniciarMock } from '../api/mock'
-import { Banderas } from '../componentes/Banderas'
 import { DetalleItems } from '../componentes/DetalleItems'
 import { Marca } from '../componentes/Marca'
 import { usarMock } from '../config'
 import { useConexion, useEvento } from '../hooks/useEvento'
 import { formatearSoles } from '../lib/dinero'
 import { formatearHora } from '../lib/formato'
-import { idiomaActivo } from '../lib/idioma'
 import type { EstadoPedido, Mesa, ReporteHoy } from '../tipos'
 
 const TONO: Record<EstadoPedido, string> = {
@@ -21,8 +19,7 @@ const TONO: Record<EstadoPedido, string> = {
 }
 
 export function AdminPagina() {
-  const { t, i18n } = useTranslation()
-  const idioma = idiomaActivo(i18n.language)
+  const { t } = useTranslation()
   const [reporte, setReporte] = useState<ReporteHoy | null>(null)
   const [mesas, setMesas] = useState<Mesa[]>([])
   const [error, setError] = useState(false)
@@ -84,7 +81,6 @@ export function AdminPagina() {
             {usarMock && (
               <span className="rounded-full bg-miel/30 px-3 py-1 text-xs font-semibold">{t('comun.demo')}</span>
             )}
-            <Banderas />
             <Link to="/cocina" className="rounded-full bg-crema px-4 py-2 text-sm font-semibold">
               {t('admin.cocina')}
             </Link>
@@ -154,7 +150,7 @@ export function AdminPagina() {
                     {mesa.online ? t('admin.enLinea') : t('admin.fueraDeLinea')}
                   </p>
                   <p className="mt-1 text-xs text-suave">
-                    {mesa.ultimaConexion ? formatearHora(mesa.ultimaConexion, idioma) : t('admin.sinConexion')}
+                    {mesa.ultimaConexion ? formatearHora(mesa.ultimaConexion) : t('admin.sinConexion')}
                   </p>
                 </li>
               ))}
@@ -190,7 +186,7 @@ export function AdminPagina() {
                   >
                     <span className="font-semibold">
                       #{pedido.id}
-                      <span className="ml-2 font-normal text-suave">{formatearHora(pedido.creadoEn, idioma)}</span>
+                      <span className="ml-2 font-normal text-suave">{formatearHora(pedido.creadoEn)}</span>
                     </span>
                     <span>{t('menu.mesa', { numero: pedido.mesa })}</span>
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold ${TONO[pedido.estado]}`}>

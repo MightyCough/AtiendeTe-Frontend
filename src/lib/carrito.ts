@@ -76,7 +76,7 @@ export function totalLineaVisible(linea: LineaCarrito): number {
   )
 }
 
-/** Al cambiar de idioma, los nombres del carrito se alinean con la carta recién cargada. */
+/** Si la carta se vuelve a cargar, los nombres del carrito siguen a esos platos. */
 export function sincronizarNombres(lineas: LineaCarrito[], categorias: Categoria[]): LineaCarrito[] {
   const productos = new Map(categorias.flatMap((categoria) => categoria.productos.map((producto) => [producto.id, producto])))
   return lineas.map((linea) => {

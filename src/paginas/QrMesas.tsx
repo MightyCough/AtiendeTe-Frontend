@@ -90,7 +90,6 @@ export function QrPagina() {
                   />
                 </div>
                 <p className="mt-4 font-semibold">{t('qr.escanear')}</p>
-                <p className="text-sm text-suave">{t('qr.escanearEn')}</p>
                 <p className="mt-2 break-all text-xs text-suave">{url}</p>
               </article>
             )

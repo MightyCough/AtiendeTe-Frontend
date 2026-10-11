@@ -18,13 +18,11 @@ describe('número de mesa del QR', () => {
 })
 
 describe('carta localizada', () => {
-  it('mantiene los mismos productos en español e inglés', () => {
-    const es = localizarMenu('es')
-    const en = localizarMenu('en')
-    const ids = (menu: typeof es) => menu.categorias.flatMap((categoria) => categoria.productos.map((producto) => producto.id))
-    expect(ids(es)).toEqual(ids(en))
-    expect(es.categorias[0]?.nombre).not.toBe(en.categorias[0]?.nombre)
-    const lomo = es.categorias.flatMap((categoria) => categoria.productos).find((producto) => producto.id === 5)
+  it('arma la carta en español', () => {
+    const menu = localizarMenu()
+    expect(menu.categorias[0]?.nombre).toBe('Entradas')
+    const lomo = menu.categorias.flatMap((categoria) => categoria.productos).find((producto) => producto.id === 5)
+    expect(lomo?.nombre).toBe('Lomo saltado')
     expect(lomo?.adicionales.length).toBeGreaterThan(0)
     expect(lomo?.ingredientesRemovibles.length).toBeGreaterThan(0)
   })

@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { Banderas } from '../../componentes/Banderas'
 import { FotoProducto } from '../../componentes/FotoProducto'
 import { Marca } from '../../componentes/Marca'
 import { formatearSoles } from '../../lib/dinero'
@@ -32,7 +31,6 @@ export function Carta({
       <header className="sticky top-0 z-20 border-b border-linea/80 bg-crema/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center justify-between gap-3">
           <Marca />
-          <Banderas />
         </div>
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="font-serif text-2xl">{t('menu.mesa', { numero: mesa.numero })}</p>

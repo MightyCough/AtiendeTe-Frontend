@@ -1,19 +1,14 @@
-import type { Idioma, MenuRespuesta } from '../tipos'
-
-interface Texto {
-  es: string
-  en: string
-}
+import type { MenuRespuesta } from '../tipos'
 
 interface AdicionalFuente {
   id: number
   precioExtra: number
-  nombre: Texto
+  nombre: string
 }
 
 interface IngredienteFuente {
   id: number
-  nombre: Texto
+  nombre: string
 }
 
 interface ProductoFuente {
@@ -21,56 +16,53 @@ interface ProductoFuente {
   precio: number
   imagenUrl: string | null
   disponible: boolean
-  nombre: Texto
-  descripcion: Texto
+  nombre: string
+  descripcion: string
   adicionales: AdicionalFuente[]
   ingredientesRemovibles: IngredienteFuente[]
 }
 
 interface CategoriaFuente {
   id: number
-  nombre: Texto
+  nombre: string
   productos: ProductoFuente[]
 }
 
-const huevo: AdicionalFuente = { id: 101, precioExtra: 3, nombre: { es: 'Huevo frito', en: 'Fried egg' } }
-const papas: AdicionalFuente = { id: 103, precioExtra: 5, nombre: { es: 'Porción de papas', en: 'Extra fries' } }
-const arroz: AdicionalFuente = { id: 104, precioExtra: 4, nombre: { es: 'Arroz extra', en: 'Extra rice' } }
-const ajiExtra: AdicionalFuente = { id: 105, precioExtra: 1.5, nombre: { es: 'Ají extra', en: 'Extra chili' } }
-const palta: AdicionalFuente = { id: 106, precioExtra: 4, nombre: { es: 'Palta extra', en: 'Extra avocado' } }
-const yuca: AdicionalFuente = { id: 107, precioExtra: 5, nombre: { es: 'Yuca extra', en: 'Extra yuca' } }
-const salsa: AdicionalFuente = { id: 108, precioExtra: 2.5, nombre: { es: 'Salsa criolla extra', en: 'Extra salsa' } }
-const carne: AdicionalFuente = { id: 109, precioExtra: 6, nombre: { es: 'Carne extra', en: 'Extra beef' } }
-const porcion: AdicionalFuente = { id: 110, precioExtra: 8, nombre: { es: 'Porción extra', en: 'Extra portion' } }
-const shot: AdicionalFuente = { id: 111, precioExtra: 2.5, nombre: { es: 'Shot de café', en: 'Extra shot' } }
-const leche: AdicionalFuente = { id: 112, precioExtra: 1.5, nombre: { es: 'Leche', en: 'Milk' } }
-const miel: AdicionalFuente = { id: 113, precioExtra: 2, nombre: { es: 'Miel extra', en: 'Extra syrup' } }
-const fruta: AdicionalFuente = { id: 114, precioExtra: 3, nombre: { es: 'Fruta extra', en: 'Extra fruit' } }
+const huevo: AdicionalFuente = { id: 101, precioExtra: 3, nombre: 'Huevo frito' }
+const papas: AdicionalFuente = { id: 103, precioExtra: 5, nombre: 'Porción de papas' }
+const arroz: AdicionalFuente = { id: 104, precioExtra: 4, nombre: 'Arroz extra' }
+const ajiExtra: AdicionalFuente = { id: 105, precioExtra: 1.5, nombre: 'Ají extra' }
+const palta: AdicionalFuente = { id: 106, precioExtra: 4, nombre: 'Palta extra' }
+const yuca: AdicionalFuente = { id: 107, precioExtra: 5, nombre: 'Yuca extra' }
+const salsa: AdicionalFuente = { id: 108, precioExtra: 2.5, nombre: 'Salsa criolla extra' }
+const carne: AdicionalFuente = { id: 109, precioExtra: 6, nombre: 'Carne extra' }
+const porcion: AdicionalFuente = { id: 110, precioExtra: 8, nombre: 'Porción extra' }
+const shot: AdicionalFuente = { id: 111, precioExtra: 2.5, nombre: 'Shot de café' }
+const leche: AdicionalFuente = { id: 112, precioExtra: 1.5, nombre: 'Leche' }
+const miel: AdicionalFuente = { id: 113, precioExtra: 2, nombre: 'Miel extra' }
+const fruta: AdicionalFuente = { id: 114, precioExtra: 3, nombre: 'Fruta extra' }
 
-const cebolla: IngredienteFuente = { id: 201, nombre: { es: 'Cebolla', en: 'Onion' } }
-const aji: IngredienteFuente = { id: 202, nombre: { es: 'Ají', en: 'Chili' } }
-const cilantro: IngredienteFuente = { id: 203, nombre: { es: 'Cilantro', en: 'Cilantro' } }
-const aceituna: IngredienteFuente = { id: 204, nombre: { es: 'Aceituna', en: 'Olive' } }
-const tomate: IngredienteFuente = { id: 205, nombre: { es: 'Tomate', en: 'Tomato' } }
-const azucar: IngredienteFuente = { id: 206, nombre: { es: 'Azúcar', en: 'Sugar' } }
-const limon: IngredienteFuente = { id: 207, nombre: { es: 'Limón', en: 'Lime' } }
+const cebolla: IngredienteFuente = { id: 201, nombre: 'Cebolla' }
+const aji: IngredienteFuente = { id: 202, nombre: 'Ají' }
+const cilantro: IngredienteFuente = { id: 203, nombre: 'Cilantro' }
+const aceituna: IngredienteFuente = { id: 204, nombre: 'Aceituna' }
+const tomate: IngredienteFuente = { id: 205, nombre: 'Tomate' }
+const azucar: IngredienteFuente = { id: 206, nombre: 'Azúcar' }
+const limon: IngredienteFuente = { id: 207, nombre: 'Limón' }
 
 /** Carta de demostración, con precios en soles y platos de la sierra. */
 export const CATALOGO: CategoriaFuente[] = [
   {
     id: 1,
-    nombre: { es: 'Entradas', en: 'Starters' },
+    nombre: 'Entradas',
     productos: [
       {
         id: 1,
         precio: 14,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Papa a la huancaína', en: 'Huancaína potatoes' },
-        descripcion: {
-          es: 'Papa amarilla, salsa de ají amarillo y queso fresco, con huevo y aceituna.',
-          en: 'Yellow potato, yellow chili and fresh cheese sauce, with egg and olive.',
-        },
+        nombre: 'Papa a la huancaína',
+        descripcion: 'Papa amarilla, salsa de ají amarillo y queso fresco, con huevo y aceituna.',
         adicionales: [huevo, ajiExtra],
         ingredientesRemovibles: [aceituna, aji],
       },
@@ -79,11 +71,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 16,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Tequeños de lomo', en: 'Beef tequeños' },
-        descripcion: {
-          es: 'Rollitos crocantes de lomo y queso, con salsa criolla al costado.',
-          en: 'Crisp rolls of beef and cheese, served with salsa criolla.',
-        },
+        nombre: 'Tequeños de lomo',
+        descripcion: 'Rollitos crocantes de lomo y queso, con salsa criolla al costado.',
         adicionales: [salsa],
         ingredientesRemovibles: [cebolla],
       },
@@ -92,11 +81,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 15,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Causa de pollo', en: 'Chicken causa' },
-        descripcion: {
-          es: 'Causa de papa amarilla rellena de pollo, con palta y un toque de limón.',
-          en: 'Yellow potato causa filled with chicken, avocado, and a touch of lime.',
-        },
+        nombre: 'Causa de pollo',
+        descripcion: 'Causa de papa amarilla rellena de pollo, con palta y un toque de limón.',
         adicionales: [palta],
         ingredientesRemovibles: [aceituna, limon],
       },
@@ -105,11 +91,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 22,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Chicharrón de pota', en: 'Crispy squid' },
-        descripcion: {
-          es: 'Pota crocante, yuca dorada y salsa criolla.',
-          en: 'Crispy squid, fried yuca, and salsa criolla.',
-        },
+        nombre: 'Chicharrón de pota',
+        descripcion: 'Pota crocante, yuca dorada y salsa criolla.',
         adicionales: [yuca, salsa],
         ingredientesRemovibles: [cebolla, aji],
       },
@@ -117,18 +100,15 @@ export const CATALOGO: CategoriaFuente[] = [
   },
   {
     id: 2,
-    nombre: { es: 'Platos de fondo', en: 'Mains' },
+    nombre: 'Platos de fondo',
     productos: [
       {
         id: 5,
         precio: 32,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Lomo saltado', en: 'Lomo saltado' },
-        descripcion: {
-          es: 'Lomo, cebolla y tomate salteados, con papas fritas y arroz.',
-          en: 'Stir-fried beef, onion, and tomato, with fries and rice.',
-        },
+        nombre: 'Lomo saltado',
+        descripcion: 'Lomo, cebolla y tomate salteados, con papas fritas y arroz.',
         adicionales: [huevo, papas, arroz],
         ingredientesRemovibles: [cebolla, aji, tomate],
       },
@@ -137,11 +117,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 28,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Ají de gallina', en: 'Ají de gallina' },
-        descripcion: {
-          es: 'Crema de ají amarillo y gallina deshilachada, con arroz y aceituna.',
-          en: 'Yellow chili cream and shredded chicken, with rice and olive.',
-        },
+        nombre: 'Ají de gallina',
+        descripcion: 'Crema de ají amarillo y gallina deshilachada, con arroz y aceituna.',
         adicionales: [huevo, arroz],
         ingredientesRemovibles: [aceituna, aji],
       },
@@ -150,11 +127,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 36,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Pachamanca de la casa', en: 'House pachamanca' },
-        descripcion: {
-          es: 'Carnes y tubérculos al estilo de la sierra, con hierba buena y ají.',
-          en: 'Highland-style meats and tubers, with herbs and chili.',
-        },
+        nombre: 'Pachamanca de la casa',
+        descripcion: 'Carnes y tubérculos al estilo de la sierra, con hierba buena y ají.',
         adicionales: [porcion, ajiExtra],
         ingredientesRemovibles: [cilantro, aji],
       },
@@ -163,11 +137,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 30,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Tallarín saltado', en: 'Stir-fried noodles' },
-        descripcion: {
-          es: 'Tallarines salteados con lomo, verduras y sillao.',
-          en: 'Noodles stir-fried with beef, vegetables, and soy sauce.',
-        },
+        nombre: 'Tallarín saltado',
+        descripcion: 'Tallarines salteados con lomo, verduras y sillao.',
         adicionales: [huevo, carne],
         ingredientesRemovibles: [cebolla, aji],
       },
@@ -176,30 +147,24 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 34,
         imagenUrl: null,
         disponible: false,
-        nombre: { es: 'Trucha frita', en: 'Fried trout' },
-        descripcion: {
-          es: 'Trucha del día, yuca y ensalada. Hoy no hay en cocina.',
-          en: 'Trout of the day, yuca, and salad. Sold out today.',
-        },
-        adicionales: [yuca, { id: 115, precioExtra: 1, nombre: { es: 'Limón extra', en: 'Extra lime' } }],
+        nombre: 'Trucha frita',
+        descripcion: 'Trucha del día, yuca y ensalada. Hoy no hay en cocina.',
+        adicionales: [yuca, { id: 115, precioExtra: 1, nombre: 'Limón extra' }],
         ingredientesRemovibles: [limon],
       },
     ],
   },
   {
     id: 3,
-    nombre: { es: 'Bebidas', en: 'Drinks' },
+    nombre: 'Bebidas',
     productos: [
       {
         id: 10,
         precio: 8,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Chicha morada', en: 'Purple corn drink' },
-        descripcion: {
-          es: 'Jarra de maíz morado, piña y canela.',
-          en: 'Purple corn, pineapple, and cinnamon.',
-        },
+        nombre: 'Chicha morada',
+        descripcion: 'Jarra de maíz morado, piña y canela.',
         adicionales: [],
         ingredientesRemovibles: [azucar],
       },
@@ -208,11 +173,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 7,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Limonada', en: 'Limeade' },
-        descripcion: {
-          es: 'Limón fresco, hierbabuena y hielo.',
-          en: 'Fresh lime, mint, and ice.',
-        },
+        nombre: 'Limonada',
+        descripcion: 'Limón fresco, hierbabuena y hielo.',
         adicionales: [],
         ingredientesRemovibles: [azucar],
       },
@@ -221,11 +183,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 6,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Inca Kola', en: 'Inca Kola' },
-        descripcion: {
-          es: 'Botella bien fría.',
-          en: 'A cold bottle.',
-        },
+        nombre: 'Inca Kola',
+        descripcion: 'Botella bien fría.',
         adicionales: [],
         ingredientesRemovibles: [],
       },
@@ -234,11 +193,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 5,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Café pasado', en: 'Drip coffee' },
-        descripcion: {
-          es: 'Café de la mañana, servido en taza grande.',
-          en: 'Morning coffee, served in a large cup.',
-        },
+        nombre: 'Café pasado',
+        descripcion: 'Café de la mañana, servido en taza grande.',
         adicionales: [shot, leche],
         ingredientesRemovibles: [azucar],
       },
@@ -246,18 +202,15 @@ export const CATALOGO: CategoriaFuente[] = [
   },
   {
     id: 4,
-    nombre: { es: 'Postres', en: 'Desserts' },
+    nombre: 'Postres',
     productos: [
       {
         id: 14,
         precio: 12,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Picarones', en: 'Picarones' },
-        descripcion: {
-          es: 'Aros de zapallo y camote, con miel de chancaca.',
-          en: 'Squash and sweet-potato rings with cane syrup.',
-        },
+        nombre: 'Picarones',
+        descripcion: 'Aros de zapallo y camote, con miel de chancaca.',
         adicionales: [miel],
         ingredientesRemovibles: [],
       },
@@ -266,11 +219,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 14,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Suspiro a la limeña', en: 'Suspiro limeño' },
-        descripcion: {
-          es: 'Manjar blanco y merengue de oporto, con canela.',
-          en: 'Dulce de leche and port meringue, with cinnamon.',
-        },
+        nombre: 'Suspiro a la limeña',
+        descripcion: 'Manjar blanco y merengue de oporto, con canela.',
         adicionales: [],
         ingredientesRemovibles: [],
       },
@@ -279,11 +229,8 @@ export const CATALOGO: CategoriaFuente[] = [
         precio: 10,
         imagenUrl: null,
         disponible: true,
-        nombre: { es: 'Mazamorra morada', en: 'Purple corn pudding' },
-        descripcion: {
-          es: 'Postre de maíz morado y frutas, tibio o frío.',
-          en: 'Purple corn and fruit pudding, warm or cold.',
-        },
+        nombre: 'Mazamorra morada',
+        descripcion: 'Postre de maíz morado y frutas, tibio o frío.',
         adicionales: [fruta],
         ingredientesRemovibles: [],
       },
@@ -299,26 +246,27 @@ export function buscarProductoFuente(productoId: number): ProductoFuente | undef
   return undefined
 }
 
-export function localizarMenu(idioma: Idioma): MenuRespuesta {
+/** La carta de demostración sale siempre en español. */
+export function localizarMenu(): MenuRespuesta {
   return {
     categorias: CATALOGO.map((categoria) => ({
       id: categoria.id,
-      nombre: categoria.nombre[idioma],
+      nombre: categoria.nombre,
       productos: categoria.productos.map((producto) => ({
         id: producto.id,
-        nombre: producto.nombre[idioma],
-        descripcion: producto.descripcion[idioma],
+        nombre: producto.nombre,
+        descripcion: producto.descripcion,
         precio: producto.precio,
         imagenUrl: producto.imagenUrl,
         disponible: producto.disponible,
         adicionales: producto.adicionales.map((extra) => ({
           id: extra.id,
-          nombre: extra.nombre[idioma],
+          nombre: extra.nombre,
           precioExtra: extra.precioExtra,
         })),
         ingredientesRemovibles: producto.ingredientesRemovibles.map((ingrediente) => ({
           id: ingrediente.id,
-          nombre: ingrediente.nombre[idioma],
+          nombre: ingrediente.nombre,
         })),
       })),
     })),

@@ -10,11 +10,11 @@ Todo corre en la red local: el portátil sirve esta interfaz y el API; los celul
 | --- | --- | --- |
 | `/menu?mesa=N` | Cliente | Carta, carrito y confirmación. Si `mesa` falta o no es válida, muestra un error. |
 | `/pedido/:id` | Cliente | Estado en vivo: Recibido → En preparación → Listo → Entregado. |
-| `/cocina` | Cocina | Tablero solo en español. Pedidos nuevos con sonido y botones grandes para avanzar. |
+| `/cocina` | Cocina | Tablero de pedidos. Avisos con sonido y botones grandes para avanzar. |
 | `/admin` | Caja | Pedidos de hoy, total vendido, productos más pedidos y mesas en línea / fuera de línea. |
 | `/admin/qr` | Caja | Hoja para imprimir un QR por mesa. |
 
-Los textos de cliente y administración están en español e inglés. La cocina queda en español porque los nombres de los platos llegan así desde el API. Comentarios del código, en español.
+Toda la interfaz está en español. No hay cambio de idioma. Comentarios del código, en español.
 
 ## Requisitos
 
@@ -60,8 +60,6 @@ Con `VITE_USE_MOCK=true` la interfaz no necesita backend:
 
 Abre la carta y la cocina en dos ventanas del mismo navegador para ver el pedido aparecer con sonido. Cada celular tiene su propia memoria: el mock no cruza dispositivos. Para la demo con varios teléfonos hace falta el backend.
 
-El idioma elegido por el cliente se guarda en `sessionStorage` para esa pestaña.
-
 ## Scripts
 
 ```bash
@@ -75,9 +73,9 @@ El build de producción no activa el mock salvo que `VITE_USE_MOCK=true` esté e
 
 ## Contrato del API
 
-Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `LISTO`, `ENTREGADO`. El campo `idioma` del pedido recuerda el idioma de la pantalla; los nombres de platos, adicionales e ingredientes **dentro de un pedido** van siempre en español.
+Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `LISTO`, `ENTREGADO`. La interfaz solo pide la carta en español y envía `idioma: "es"`. Los nombres de platos, adicionales e ingredientes van en español.
 
-### `GET /api/menu?lang=es|en`
+### `GET /api/menu?lang=es`
 
 ```json
 {
@@ -201,7 +199,7 @@ El cliente conecta al mismo origen que `VITE_API_URL`, path por defecto `/socket
 
 ## Pruebas
 
-`npm test` cubre los totales del carrito (incluidos adicionales y céntimos), el cambio de idioma es/en, la lectura de `?mesa=` y que la carta de demostración coincida en ambos idiomas.
+`npm test` cubre los totales del carrito (incluidos adicionales y céntimos), que los textos de la interfaz estén en español, la lectura de `?mesa=` y la carta de demostración.
 
 ## Build
 
