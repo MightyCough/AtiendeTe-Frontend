@@ -15,7 +15,7 @@ export const es = {
     subtitulo:
       'Cada mesa tiene un QR. El cliente arma su pedido en el teléfono, la cocina cambia el estado y la luz de la mesa lo acompaña.',
     cocina: 'Cocina',
-    cocinaAyuda: 'Tablero de pedidos en español',
+    cocinaAyuda: 'Tablero de pedidos',
     admin: 'Administración',
     adminAyuda: 'Ventas del día, mesas y códigos QR',
     prueba: 'Abrir mesa de prueba',
