@@ -1,20 +1,23 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Outfit', 'Avenir Next', 'Segoe UI', sans-serif;
-  --font-serif: 'Fraunces', 'Iowan Old Style', Palatino, Georgia, serif;
-  --color-crema: #f3ecdf;
-  --color-papel: #fffaf3;
-  --color-tinta: #241c16;
-  --color-suave: #6b5e53;
-  --color-linea: #e6dccb;
+  --font-sans: 'Lexend', 'Avenir Next', 'Segoe UI', sans-serif;
+  --font-serif: 'Cabin Sketch', 'Segoe Print', cursive;
+  --color-crema: #3c5344;
+  --color-papel: #f3ecdf;
+  --color-pizarra: #2c4034;
+  --color-tinta: #f6f0e6;
+  --color-tinta-oscura: #241c16;
+  --color-suave: #eadcc8;
+  --color-linea: #d9c7ae;
   --color-terracota: #c24e24;
   --color-terracota-oscuro: #8e3516;
-  --color-oliva: #243228;
+  --color-arcilla: #f6c2b0;
+  --color-oliva: #1b2820;
   --color-oliva-medio: #3c5344;
-  --color-oro: #a67c3d;
+  --color-oro: #e7b15a;
   --color-miel: #e7b15a;
-  --color-salvia: #e7f0e4;
+  --color-salvia: #d7ead4;
 }
 
 html,
@@ -25,17 +28,18 @@ body,
 
 body {
   margin: 0;
-  background-color: var(--color-crema);
-  background-image:
-    radial-gradient(circle at 8% 0%, rgba(194, 78, 36, 0.1), transparent 26%),
-    radial-gradient(circle at 100% 8%, rgba(166, 124, 61, 0.16), transparent 24%),
-    radial-gradient(circle at 80% 100%, rgba(36, 50, 40, 0.07), transparent 28%);
+  background-color: transparent;
   color: var(--color-tinta);
   font-family: var(--font-sans);
 }
 
 ::selection {
-  background: #f0c7b4;
+  background: #c24e24;
+  color: #f3ecdf;
+}
+
+html {
+  scrollbar-color: #c24e24 #243228;
 }
 
 :focus-visible {
@@ -105,6 +109,53 @@ body {
   .punto-vivo,
   .pedido-nuevo {
     animation: none;
+  }
+}
+
+.pizarra-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(243, 236, 223, 0.05), transparent 16%),
+    radial-gradient(circle at 88% 92%, rgba(231, 177, 90, 0.07), transparent 18%),
+    #243228;
+}
+
+.circuito {
+  width: 100%;
+  height: 100%;
+}
+
+.trazo {
+  fill: none;
+  stroke: rgba(243, 236, 223, 0.28);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.luz {
+  fill: none;
+  stroke: #e7b15a;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 36 520;
+  animation: recorrer 8s linear infinite;
+}
+
+@keyframes recorrer {
+  to {
+    stroke-dashoffset: -556;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luz {
+    animation: none;
+    stroke-dasharray: none;
+    opacity: 0.7;
   }
 }
 

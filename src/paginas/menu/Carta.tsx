@@ -28,7 +28,7 @@ export function Carta({
 
   return (
     <div className="mx-auto min-h-dvh max-w-lg pb-28">
-      <header className="sticky top-0 z-20 border-b border-linea/80 bg-crema/95 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-linea/40 bg-[#243228]/95 px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           <Marca />
         </div>
@@ -50,7 +50,7 @@ export function Carta({
                 aria-selected={activa}
                 onClick={() => onCategoria(item.id)}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
-                  activa ? 'bg-oliva text-papel' : 'bg-papel text-tinta ring-1 ring-linea'
+                  activa ? 'bg-oliva text-papel' : 'bg-pizarra text-tinta ring-1 ring-linea'
                 }`}
               >
                 {item.nombre}
@@ -66,7 +66,7 @@ export function Carta({
             key={producto.id}
             type="button"
             onClick={() => onAbrir(producto)}
-            className={`w-full overflow-hidden rounded-3xl bg-papel text-left shadow-[0_10px_30px_rgba(36,28,22,0.06)] ring-1 ring-linea transition active:scale-[0.99] ${
+            className={`w-full overflow-hidden rounded-3xl bg-pizarra text-left ring-1 ring-linea/50 transition active:scale-[0.99] ${
               producto.disponible ? '' : 'opacity-75'
             }`}
           >
@@ -81,7 +81,7 @@ export function Carta({
             <div className="px-4 py-3">
               <div className="flex items-start justify-between gap-3">
                 <h2 className="font-serif text-2xl leading-tight">{producto.nombre}</h2>
-                <span className="shrink-0 font-semibold text-terracota">{formatearSoles(producto.precio)}</span>
+                <span className="shrink-0 font-semibold text-miel">{formatearSoles(producto.precio)}</span>
               </div>
               <p className="mt-1 line-clamp-2 text-sm text-suave">{producto.descripcion}</p>
             </div>

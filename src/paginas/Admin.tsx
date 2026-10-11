@@ -64,7 +64,7 @@ export function AdminPagina() {
 
   return (
     <div className="min-h-dvh">
-      <header className="border-b border-linea bg-papel/80">
+      <header className="border-b border-linea/40 bg-[#243228]/92">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
           <div>
             <Link to="/">
@@ -93,16 +93,16 @@ export function AdminPagina() {
 
       <main className="mx-auto max-w-6xl px-4 py-6">
         {error && (
-          <div className="mb-4 rounded-2xl bg-papel px-4 py-3 ring-1 ring-linea">
+          <div className="mb-4 rounded-2xl bg-pizarra px-4 py-3 ring-1 ring-linea">
             <p>{t('comun.errorRed')}</p>
-            <button type="button" onClick={() => setIntento((valor) => valor + 1)} className="mt-2 font-semibold text-terracota">
+            <button type="button" onClick={() => setIntento((valor) => valor + 1)} className="mt-2 font-semibold text-miel">
               {t('comun.reintentar')}
             </button>
           </div>
         )}
 
         <section className="grid gap-3 md:grid-cols-3">
-          <article className="rounded-3xl bg-papel p-5 ring-1 ring-linea">
+          <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <p className="text-sm text-suave">{t('admin.pedidosHoy')}</p>
             <p className="mt-2 font-serif text-4xl">{reporte?.pedidos.length ?? '—'}</p>
           </article>
@@ -111,7 +111,7 @@ export function AdminPagina() {
             <p className="mt-2 font-serif text-4xl">{reporte ? formatearSoles(reporte.totalVendido) : '—'}</p>
             <p className="mt-2 text-xs text-papel/70">{t('admin.totalAyuda')}</p>
           </article>
-          <article className="rounded-3xl bg-papel p-5 ring-1 ring-linea">
+          <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <p className="text-sm text-suave">{t('admin.mesasEnLinea')}</p>
             <p className="mt-2 font-serif text-4xl">
               {mesas.length === 0 ? '—' : `${enLinea} / ${mesas.length}`}
@@ -120,7 +120,7 @@ export function AdminPagina() {
         </section>
 
         <section className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_1.4fr]">
-          <article className="rounded-3xl bg-papel p-5 ring-1 ring-linea">
+          <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <h2 className="font-serif text-2xl">{t('admin.top')}</h2>
             {reporte && reporte.topProductos.length === 0 && <p className="mt-3 text-sm text-suave">{t('admin.topVacio')}</p>}
             <ol className="mt-4 space-y-3">
@@ -139,7 +139,7 @@ export function AdminPagina() {
             </ol>
           </article>
 
-          <article className="rounded-3xl bg-papel p-5 ring-1 ring-linea">
+          <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <h2 className="font-serif text-2xl">{t('admin.mesas')}</h2>
             <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {mesas.map((mesa) => (
@@ -158,7 +158,7 @@ export function AdminPagina() {
           </article>
         </section>
 
-        <section className="mt-6 rounded-3xl bg-papel p-5 ring-1 ring-linea">
+        <section className="mt-6 rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="font-serif text-2xl">{t('admin.pedidos')}</h2>
             <div className="flex flex-wrap gap-2">
@@ -193,7 +193,7 @@ export function AdminPagina() {
                       {t(`pedido.estados.${pedido.estado}`)}
                     </span>
                     <span className="font-semibold tabular-nums">{formatearSoles(pedido.total)}</span>
-                    <span className="text-xs font-semibold text-terracota">
+                    <span className="text-xs font-semibold text-miel">
                       {abiertoEste ? t('admin.ocultarDetalle') : t('admin.verDetalle')}
                     </span>
                   </button>

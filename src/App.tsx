@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Circuito } from './componentes/Circuito'
 import { AdminPagina } from './paginas/Admin'
 import { CocinaPagina } from './paginas/Cocina'
 import { InicioPagina } from './paginas/Inicio'
@@ -10,6 +11,8 @@ import { QrPagina } from './paginas/QrMesas'
 export function App() {
   return (
     <BrowserRouter>
+      <Circuito />
+      <div className="relative z-10">
       <Routes>
         <Route path="/" element={<InicioPagina />} />
         <Route path="/menu" element={<MenuPagina />} />
@@ -19,6 +22,7 @@ export function App() {
         <Route path="/admin/qr" element={<QrPagina />} />
         <Route path="*" element={<NoEncontrada />} />
       </Routes>
+      </div>
     </BrowserRouter>
   )
 }

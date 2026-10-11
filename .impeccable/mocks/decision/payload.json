@@ -1,0 +1,109 @@
+{
+  "title": "Elige cómo se ve el inicio",
+  "question": "Tres formas de mostrar AtiendeTe como proyecto de IoT para un restaurante. La paleta actual se queda. Elige una, o pide otra mano.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "El mantel",
+      "kicker": "THE ROLL",
+      "lineage": "El sexto sistema de la lista, por resonancia: el mantel andino de la mesa",
+      "thesis": "La página es un solo mantel. El pedido viaja como un hilo de luz de la mesa a la cocina.",
+      "palette": ["#f3ecdf", "#243228", "#c24e24", "#a67c3d", "#e7b15a", "#241c16"],
+      "materials": ["tejido", "hilo de luz"],
+      "viewport": "Un paño continuo con las bandas Recibido, En preparación, Listo y Entregado, y Cocina como la acción que se puede tomar.",
+      "risk": "Si el tejido se come los botones, deja de ser una pantalla y pasa a ser una tela.",
+      "raised": [
+        {
+          "from": "tinta fluida",
+          "raise": "Cocina, administración y mesas son pliegues del mismo paño, no tarjetas sueltas."
+        },
+        {
+          "from": "frascos",
+          "raise": "Cada mesa lleva su estado en una cinta tejida, no en una insignia."
+        },
+        {
+          "from": "lluvia de glifos",
+          "raise": "El dibujo del paño se queda quieto. Solo el hilo del pedido se enciende y se detiene."
+        }
+      ],
+      "comp": ".impeccable/mocks/decision/assigned.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "La pizarra",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "La pizarra del comedor, donde la cocina anota el día",
+      "thesis": "El inicio es la pizarra del día: tiza sobre oliva, y Cocina es lo que se escribe más grande.",
+      "palette": ["#243228", "#f3ecdf", "#c24e24", "#e7b15a"],
+      "materials": ["pizarra", "tiza"],
+      "viewport": "Todo el viewport es la pizarra. El titular va en tiza crema y Cocina en tiza terracota.",
+      "risk": "Es la dirección en la que cae casi todo restaurante. Se reconoce al instante y se confunde con otros.",
+      "comp": ".impeccable/mocks/decision/model-pick.png"
+    },
+    {
+      "id": "challenger-patent",
+      "label": "La hoja de la invención",
+      "verdict": "competitive",
+      "lineage": "Lámina de dibujo técnico de una invención, traducida a la paleta del proyecto",
+      "thesis": "El inicio es la lámina del sistema: teléfono, QR, mesa, cocina y lámpara, unidos por líderes.",
+      "palette": ["#f3ecdf", "#241c16", "#c24e24", "#e7b15a"],
+      "materials": ["tinta", "línea de líder", "papel crema"],
+      "viewport": "Una hoja con borde, el título AtiendeTe arriba y la luz recorriendo el líder del teléfono a la lámpara.",
+      "case": "Se lee como proyecto de IoT. Pierde en identificación: un comedor no se reconoce en una lámina de patente.",
+      "risk": "Si parece un plano escolar, esconde que esto se usa en un restaurante.",
+      "comp": ".impeccable/mocks/decision/challenger-patent.png"
+    },
+    {
+      "id": "challenger-ink",
+      "label": "Cubeta de tinta",
+      "verdict": "declined",
+      "lineage": "Tinta sumi sobre agua",
+      "palette": ["#1c2430", "#f4f1ea"],
+      "materials": ["tinta", "agua"],
+      "thesis": "La superficie sería un fluido.",
+      "viewport": "Una cubeta continua.",
+      "case": "No es un objeto de este curso ni de este comedor, y no muestra cocina ni mesa.",
+      "kept": "Una sola superficie continua, sin tarjetas.",
+      "risk": "El producto desaparece dentro del efecto."
+    },
+    {
+      "id": "challenger-jars",
+      "label": "Frascos de salmuera",
+      "verdict": "declined",
+      "lineage": "Calendario de encurtidos",
+      "palette": ["#f3ecdf", "#c24e24", "#3c5344"],
+      "materials": ["vidrio", "etiqueta"],
+      "thesis": "Cada pedido sería un frasco.",
+      "viewport": "Una repisa de frascos.",
+      "case": "Inventa un producto de fermentación que AtiendeTe no es.",
+      "kept": "Cada mesa muestra su estado en una cinta con nombre.",
+      "risk": "Parece otra carta de comida."
+    },
+    {
+      "id": "challenger-rain",
+      "label": "Lluvia de código",
+      "verdict": "declined",
+      "lineage": "Terminal de glifos verdes",
+      "palette": ["#041208", "#7CFF6B"],
+      "materials": ["fósforo"],
+      "thesis": "El inicio caería como lluvia de caracteres.",
+      "viewport": "Columnas de glifos.",
+      "case": "No es una herramienta de seguridad y tapa las acciones.",
+      "kept": "El fondo se queda en textura. Solo el camino activo se enciende.",
+      "risk": "Disfraz de película."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "comp", "toggle": true },
+  "canon": true,
+  "canonCard": {
+    "label": "La página simple de ahora",
+    "thesis": "Titular a la izquierda y tres bloques a la derecha, que es lo que ya está en main.",
+    "palette": ["#f3ecdf", "#243228", "#c24e24", "#a67c3d"],
+    "materials": ["crema", "tarjetas redondeadas"],
+    "viewport": "Universidad de Huánuco, el titular, Cocina, Administración y las mesas de prueba.",
+    "risk": "Es la interfaz simple que ya quieres cambiar.",
+    "comp": ".impeccable/mocks/decision/canon.png"
+  },
+  "steer": true
+}

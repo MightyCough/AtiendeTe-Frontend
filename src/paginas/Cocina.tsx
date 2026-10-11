@@ -106,11 +106,11 @@ export function CocinaPagina() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#171412] text-[#f6efe4]">
+    <div className="min-h-dvh text-tinta">
       <header className="border-b border-white/10">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-4">
           <div>
-            <Marca clara />
+            <Marca />
             <h1 className="mt-2 font-serif text-3xl">Cocina</h1>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -154,21 +154,21 @@ export function CocinaPagina() {
               .filter((pedido) => pedido.estado === estado)
               .sort((a, b) => a.creadoEn.localeCompare(b.creadoEn))
             return (
-              <section key={estado} className="flex min-h-0 flex-col rounded-3xl bg-[#221e1b] p-3">
+              <section key={estado} className="flex min-h-0 flex-col rounded-3xl bg-pizarra/90 p-3 ring-1 ring-linea/30">
                 <header className="mb-3 flex items-center justify-between px-1">
                   <h2 className="font-serif text-2xl">{TITULO[estado]}</h2>
                   <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${TONO[estado]}`}>{columna.length}</span>
                 </header>
                 <div className="space-y-3 xl:min-h-0 xl:flex-1 xl:overflow-y-auto">
-                  {columna.length === 0 && <p className="px-1 text-sm text-[#b7aa9e]">Sin pedidos</p>}
+                  {columna.length === 0 && <p className="px-1 text-sm text-suave">Sin pedidos</p>}
                   {columna.map((pedido) => (
                     <article
                       key={pedido.id}
-                      className={`rounded-2xl bg-[#2c2622] p-4 ${recien.includes(pedido.id) ? 'pedido-nuevo' : ''}`}
+                      className={`rounded-2xl bg-crema p-4 ${recien.includes(pedido.id) ? 'pedido-nuevo' : ''}`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <p className="font-serif text-3xl leading-none">Mesa {pedido.mesa}</p>
-                        <p className="text-right text-xs text-[#b7aa9e]">
+                        <p className="text-right text-xs text-suave">
                           #{pedido.id}
                           <br />
                           {haceCuanto(pedido.creadoEn, ahora)}
@@ -188,7 +188,7 @@ export function CocinaPagina() {
                           type="button"
                           disabled={ocupado === pedido.id}
                           onClick={() => void avanzar(pedido)}
-                          className="mt-4 min-h-14 w-full rounded-2xl bg-[#f3ecdf] text-lg font-bold text-[#241c16] disabled:opacity-60"
+                          className="mt-4 min-h-14 w-full rounded-2xl bg-terracota text-lg font-bold text-white disabled:opacity-60"
                         >
                           {ocupado === pedido.id ? 'Guardando…' : ACCION[estado]}
                         </button>
