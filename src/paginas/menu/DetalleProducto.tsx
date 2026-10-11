@@ -54,7 +54,7 @@ export function DetalleProducto({
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-producto"
-        className="entrada flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-papel shadow-2xl sm:rounded-3xl"
+        className="entrada flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-pizarra shadow-2xl sm:rounded-3xl"
         onClick={(evento) => evento.stopPropagation()}
       >
         <div className="relative aspect-[16/9] shrink-0">
@@ -63,7 +63,7 @@ export function DetalleProducto({
             type="button"
             onClick={onCerrar}
             aria-label={t('comun.cerrar')}
-            className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-papel/95 text-tinta"
+            className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-pizarra/95 text-tinta"
           >
             <IconoCerrar />
           </button>
@@ -73,7 +73,7 @@ export function DetalleProducto({
             <h2 id="titulo-producto" className="font-serif text-3xl leading-tight">
               {producto.nombre}
             </h2>
-            <p className="shrink-0 font-semibold text-terracota">{formatearSoles(producto.precio)}</p>
+            <p className="shrink-0 font-semibold text-miel">{formatearSoles(producto.precio)}</p>
           </div>
           <p className="text-sm leading-relaxed text-suave">{producto.descripcion}</p>
           {!producto.disponible && (
@@ -87,7 +87,7 @@ export function DetalleProducto({
                 type="button"
                 aria-label={t('menu.disminuir')}
                 onClick={() => setCantidad((valor) => Math.max(1, valor - 1))}
-                className="grid h-10 w-10 place-items-center rounded-full bg-papel"
+                className="grid h-10 w-10 place-items-center rounded-full bg-pizarra"
               >
                 <IconoMenos />
               </button>
@@ -96,7 +96,7 @@ export function DetalleProducto({
                 type="button"
                 aria-label={t('menu.aumentar')}
                 onClick={() => setCantidad((valor) => Math.min(20, valor + 1))}
-                className="grid h-10 w-10 place-items-center rounded-full bg-papel"
+                className="grid h-10 w-10 place-items-center rounded-full bg-pizarra"
               >
                 <IconoMas />
               </button>

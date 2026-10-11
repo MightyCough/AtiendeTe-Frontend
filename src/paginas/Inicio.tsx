@@ -12,46 +12,52 @@ export function InicioPagina() {
   }, [])
 
   return (
-    <main className="mx-auto grid min-h-dvh max-w-5xl items-center gap-10 px-5 py-10 md:grid-cols-2">
-      <section>
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-oro">{t('inicio.kicker')}</p>
-        <div className="mt-4">
-          <Marca />
-        </div>
-        <h1 className="mt-6 font-serif text-5xl leading-[1.05] md:text-6xl">{t('inicio.titulo')}</h1>
-        <p className="mt-4 max-w-md text-lg leading-relaxed text-suave">{t('inicio.subtitulo')}</p>
-      </section>
-      <section className="space-y-3">
-        <Link to="/cocina" className="block rounded-3xl bg-oliva px-5 py-5 text-papel">
-          <span className="font-serif text-3xl">{t('inicio.cocina')}</span>
-          <span className="mt-1 block text-sm text-papel/80">{t('inicio.cocinaAyuda')}</span>
-        </Link>
-        <Link to="/admin" className="block rounded-3xl bg-papel px-5 py-5 ring-1 ring-linea">
-          <span className="font-serif text-3xl">{t('inicio.admin')}</span>
-          <span className="mt-1 block text-sm text-suave">{t('inicio.adminAyuda')}</span>
-        </Link>
-        {usarMock && (
-          <div className="rounded-3xl bg-papel px-5 py-5 ring-1 ring-linea">
-            <p className="font-serif text-2xl">{t('inicio.prueba')}</p>
-            <p className="mt-1 text-sm text-suave">{t('inicio.pruebaAyuda', { numero: 1 })}</p>
-            <div className="mt-3 flex gap-2">
-              {[1, 2, 3].map((numero) => (
-                <Link
-                  key={numero}
-                  to={`/menu?mesa=${numero}`}
-                  className="rounded-full bg-terracota px-4 py-2 text-sm font-semibold text-white"
-                >
-                  {t('menu.mesa', { numero })}
-                </Link>
-              ))}
+    <main className="mx-auto flex min-h-dvh max-w-6xl flex-col px-5 py-8 md:px-10">
+      <header className="flex items-center justify-between gap-4">
+        <Marca />
+        <p className="text-right text-sm text-suave">{t('inicio.kicker')}</p>
+      </header>
+      <div className="grid flex-1 content-end gap-10 py-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+        <h1 className="max-w-xl font-serif text-6xl leading-[0.95] text-balance md:text-8xl">{t('inicio.titulo')}</h1>
+        <div>
+          <p className="max-w-md text-lg leading-relaxed text-suave">{t('inicio.subtitulo')}</p>
+          <Link
+            to="/cocina"
+            className="mt-6 block rounded-3xl bg-terracota px-6 py-6 text-white transition hover:bg-terracota-oscuro"
+          >
+            <span className="font-serif text-5xl leading-none">{t('inicio.cocina')}</span>
+            <span className="mt-2 block text-sm text-white">{t('inicio.cocinaAyuda')}</span>
+          </Link>
+          <Link
+            to="/admin"
+            className="mt-3 block rounded-3xl px-6 py-5 ring-1 ring-linea/70 transition hover:bg-pizarra"
+          >
+            <span className="font-serif text-4xl leading-none">{t('inicio.admin')}</span>
+            <span className="mt-2 block text-sm text-suave">{t('inicio.adminAyuda')}</span>
+          </Link>
+          {usarMock && (
+            <div className="mt-5">
+              <p className="font-serif text-2xl">{t('inicio.prueba')}</p>
+              <p className="mt-1 text-sm text-suave">{t('inicio.pruebaAyuda', { numero: 1 })}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[1, 2, 3].map((numero) => (
+                  <Link
+                    key={numero}
+                    to={`/menu?mesa=${numero}`}
+                    className="rounded-full bg-miel px-4 py-2 text-sm font-semibold text-tinta-oscura"
+                  >
+                    {t('menu.mesa', { numero })}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        <p className="px-1 text-sm text-suave">
-          <span className="font-semibold text-tinta">{t('inicio.cliente')} </span>
-          {t('inicio.clienteAyuda')}
-        </p>
-      </section>
+          )}
+          <p className="mt-6 max-w-md text-sm text-suave">
+            <span className="font-semibold text-tinta">{t('inicio.cliente')} </span>
+            {t('inicio.clienteAyuda')}
+          </p>
+        </div>
+      </div>
     </main>
   )
 }

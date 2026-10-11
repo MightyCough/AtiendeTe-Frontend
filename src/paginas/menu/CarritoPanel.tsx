@@ -45,7 +45,7 @@ export function CarritoPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-carrito"
-        className="entrada flex max-h-[92dvh] w-full max-w-lg flex-col rounded-t-3xl bg-papel shadow-2xl sm:rounded-3xl"
+        className="entrada flex max-h-[92dvh] w-full max-w-lg flex-col rounded-t-3xl bg-pizarra shadow-2xl sm:rounded-3xl"
         onClick={(evento) => evento.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 py-4">
@@ -86,7 +86,7 @@ export function CarritoPanel({
                     type="button"
                     aria-label={t('menu.disminuir')}
                     onClick={() => onCantidad(linea.clave, linea.cantidad - 1)}
-                    className="grid h-9 w-9 place-items-center rounded-full bg-papel"
+                    className="grid h-9 w-9 place-items-center rounded-full bg-pizarra"
                   >
                     <IconoMenos />
                   </button>
@@ -95,12 +95,12 @@ export function CarritoPanel({
                     type="button"
                     aria-label={t('menu.aumentar')}
                     onClick={() => onCantidad(linea.clave, linea.cantidad + 1)}
-                    className="grid h-9 w-9 place-items-center rounded-full bg-papel"
+                    className="grid h-9 w-9 place-items-center rounded-full bg-pizarra"
                   >
                     <IconoMas />
                   </button>
                 </div>
-                <button type="button" onClick={() => onQuitar(linea.clave)} className="text-sm font-semibold text-terracota">
+                <button type="button" onClick={() => onQuitar(linea.clave)} className="text-sm font-semibold text-miel">
                   {t('menu.quitar')}
                 </button>
               </div>
@@ -112,7 +112,7 @@ export function CarritoPanel({
             <span className="font-semibold">{t('menu.total')}</span>
             <span className="font-serif text-2xl tabular-nums">{formatearSoles(total)}</span>
           </div>
-          {error && <p className="mb-3 text-sm text-terracota-oscuro">{t('menu.errorEnvio')}</p>}
+          {error && <p className="mb-3 text-sm text-arcilla">{t('menu.errorEnvio')}</p>}
           <button
             type="button"
             disabled={lineas.length === 0 || enviando}

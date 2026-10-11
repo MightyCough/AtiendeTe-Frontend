@@ -97,18 +97,18 @@ export function PedidoPagina() {
   return (
     <main className="mx-auto min-h-dvh max-w-lg px-5 py-6">
       <Marca />
-      <p className="mt-6 text-sm font-semibold uppercase tracking-[0.16em] text-oro">
+      <h1 className="mt-6 font-serif text-5xl leading-none">
         {t('menu.mesa', { numero: pedido.mesa })}
-      </p>
-      <h1 className="mt-2 font-serif text-4xl">{t('pedido.numero', { id: pedido.id })}</h1>
-      <div className="mt-8 rounded-3xl bg-papel px-4 py-5 ring-1 ring-linea">
+      </h1>
+      <p className="mt-2 text-lg text-suave">{t('pedido.numero', { id: pedido.id })}</p>
+      <div className="mt-8 rounded-3xl bg-pizarra px-4 py-5 ring-1 ring-linea">
         <PasoPedido estado={pedido.estado} />
         <p className="mt-5 text-center text-lg" aria-live="polite">
           {t(`pedido.mensajes.${pedido.estado}`)}
         </p>
         <p className="mt-2 text-center text-sm text-suave">{t('pedido.luz')}</p>
       </div>
-      <section className="mt-6 rounded-3xl bg-papel px-4 py-5 ring-1 ring-linea">
+      <section className="mt-6 rounded-3xl bg-pizarra px-4 py-5 ring-1 ring-linea">
         <h2 className="font-serif text-2xl">{t('pedido.resumen')}</h2>
         <div className="mt-4">
           <DetalleItems items={pedido.items} etiquetaSin={t('pedido.sin')} etiquetaNota={t('pedido.nota')} />
@@ -118,7 +118,7 @@ export function PedidoPagina() {
           <span className="font-serif text-2xl">{formatearSoles(pedido.total)}</span>
         </div>
       </section>
-      <Link to={`/menu?mesa=${pedido.mesa}`} className="mt-6 inline-block text-sm font-semibold text-terracota">
+      <Link to={`/menu?mesa=${pedido.mesa}`} className="mt-6 inline-block text-sm font-semibold text-miel">
         {t('pedido.volverCarta')}
       </Link>
     </main>

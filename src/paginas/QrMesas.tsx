@@ -18,7 +18,7 @@ export function QrPagina() {
 
   return (
     <div className="min-h-dvh">
-      <header className="no-imprimir border-b border-linea bg-papel/80">
+      <header className="no-imprimir border-b border-linea/40 bg-[#243228]/92">
         <div className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-4 px-4 py-4">
           <div>
             <h1 className="font-serif text-4xl">{t('qr.titulo')}</h1>
@@ -44,13 +44,13 @@ export function QrPagina() {
             <input
               value={base}
               onChange={(evento) => setBase(evento.target.value)}
-              className="mt-1 w-full rounded-2xl border border-linea bg-papel px-3 py-3 text-base"
+              className="mt-1 w-full rounded-2xl border border-linea bg-pizarra px-3 py-3 text-base"
               inputMode="url"
               autoCapitalize="none"
               spellCheck={false}
             />
             <span className="mt-1 block text-xs text-suave">{t('qr.baseAyuda')}</span>
-            {!valida && <span className="mt-1 block text-sm text-terracota-oscuro">{t('qr.invalida')}</span>}
+            {!valida && <span className="mt-1 block text-sm text-arcilla">{t('qr.invalida')}</span>}
           </label>
           <label className="block">
             <span className="text-sm font-semibold">{t('qr.cantidad')}</span>
@@ -64,7 +64,7 @@ export function QrPagina() {
                 if (!Number.isInteger(valor)) return
                 setCantidad(Math.min(24, Math.max(1, valor)))
               }}
-              className="mt-1 w-32 rounded-2xl border border-linea bg-papel px-3 py-3 text-base"
+              className="mt-1 w-32 rounded-2xl border border-linea bg-pizarra px-3 py-3 text-base"
             />
           </label>
         </form>
@@ -75,10 +75,10 @@ export function QrPagina() {
           {mesas.map((numero) => {
             const url = `${limpia}/menu?mesa=${numero}`
             return (
-              <article key={numero} className="tarjeta-qr flex flex-col items-center rounded-3xl border border-dashed border-linea bg-papel px-4 py-6 text-center">
+              <article key={numero} className="tarjeta-qr flex flex-col items-center rounded-3xl border border-dashed border-linea bg-pizarra px-4 py-6 text-center">
                 <Marca />
                 <h2 className="mt-3 font-serif text-4xl">{t('qr.mesa', { numero })}</h2>
-                <div className="mt-4 rounded-2xl bg-papel p-2">
+                <div className="mt-4 rounded-2xl bg-pizarra p-2">
                   <QRCodeSVG
                     value={url}
                     size={176}
