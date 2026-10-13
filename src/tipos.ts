@@ -87,7 +87,8 @@ export interface TopProducto {
 }
 
 export interface ReporteHoy {
-  pedidos: Pedido[]
+  /** Cantidad de pedidos del día. La lista se pide aparte con GET /api/pedidos. */
+  pedidos: number
   totalVendido: number
   topProductos: TopProducto[]
 }

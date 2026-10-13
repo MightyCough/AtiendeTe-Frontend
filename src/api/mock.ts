@@ -379,5 +379,5 @@ export async function reporteHoyMock(): Promise<ReporteHoy> {
     }))
     .sort((a, b) => b.cantidad - a.cantidad || b.total - a.total)
     .slice(0, 5)
-  return { pedidos, totalVendido, topProductos }
+  return { pedidos: pedidos.length, totalVendido, topProductos }
 }

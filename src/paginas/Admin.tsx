@@ -8,8 +8,8 @@ import { Marca } from '../componentes/Marca'
 import { usarMock } from '../config'
 import { useConexion, useEvento } from '../hooks/useEvento'
 import { formatearSoles } from '../lib/dinero'
-import { formatearHora } from '../lib/formato'
-import type { EstadoPedido, Mesa, ReporteHoy } from '../tipos'
+import { fechaHoyLocal, formatearHora } from '../lib/formato'
+import type { EstadoPedido, Mesa, Pedido, ReporteHoy } from '../tipos'
 
 const TONO: Record<EstadoPedido, string> = {
   RECIBIDO: 'bg-[#f4e3c4] text-[#5c4310]',
@@ -21,6 +21,7 @@ const TONO: Record<EstadoPedido, string> = {
 export function AdminPagina() {
   const { t } = useTranslation()
   const [reporte, setReporte] = useState<ReporteHoy | null>(null)
+  const [pedidosHoy, setPedidosHoy] = useState<Pedido[]>([])
   const [mesas, setMesas] = useState<Mesa[]>([])
   const [error, setError] = useState(false)
   const [filtro, setFiltro] = useState<EstadoPedido | 'TODOS'>('TODOS')
@@ -33,10 +34,11 @@ export function AdminPagina() {
   }, [t])
 
   const cargar = useCallback(() => {
-    return Promise.all([api.reporteHoy(), api.mesas()])
-      .then(([datos, lista]) => {
+    return Promise.all([api.reporteHoy(), api.mesas(), api.pedidos({ fecha: fechaHoyLocal() })])
+      .then(([datos, lista, delDia]) => {
         setReporte(datos)
         setMesas(lista)
+        setPedidosHoy(delDia)
         setError(false)
       })
       .catch(() => setError(true))
@@ -59,7 +61,7 @@ export function AdminPagina() {
     )
   })
 
-  const pedidos = (reporte?.pedidos ?? []).filter((pedido) => filtro === 'TODOS' || pedido.estado === filtro)
+  const pedidos = pedidosHoy.filter((pedido) => filtro === 'TODOS' || pedido.estado === filtro)
   const enLinea = mesas.filter((mesa) => mesa.online).length
 
   return (
@@ -104,7 +106,7 @@ export function AdminPagina() {
         <section className="grid gap-3 md:grid-cols-3">
           <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <p className="text-sm text-suave">{t('admin.pedidosHoy')}</p>
-            <p className="mt-2 font-serif text-4xl">{reporte?.pedidos.length ?? '—'}</p>
+            <p className="mt-2 font-serif text-4xl">{reporte?.pedidos ?? '—'}</p>
           </article>
           <article className="rounded-3xl bg-oliva p-5 text-papel">
             <p className="text-sm text-papel/80">{t('admin.totalVendido')}</p>
