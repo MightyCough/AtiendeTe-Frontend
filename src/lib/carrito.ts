@@ -91,7 +91,7 @@ export function sincronizarNombres(lineas: LineaCarrito[], categorias: Categoria
         return fresco ? { ...extra, nombre: fresco.nombre, precioExtra: fresco.precioExtra } : extra
       }),
       sinIngredientes: linea.sinIngredientes.map((ingrediente) => {
-        const fresco = producto.ingredientesRemovibles.find((item) => item.id === ingrediente.id)
+        const fresco = producto.ingredientes.find((item) => item.id === ingrediente.id)
         return fresco ? { ...ingrediente, nombre: fresco.nombre } : ingrediente
       }),
     }

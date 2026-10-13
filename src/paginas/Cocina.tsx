@@ -181,6 +181,7 @@ export function CocinaPagina() {
                           etiquetaNota="Nota"
                           claro
                           mostrarPrecios={false}
+                          notaDe="notaEs"
                         />
                       </div>
                       {ACCION[estado] && (

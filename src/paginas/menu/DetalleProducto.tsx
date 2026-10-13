@@ -128,12 +128,12 @@ export function DetalleProducto({
             </fieldset>
           )}
 
-          {producto.ingredientesRemovibles.length > 0 && (
+          {producto.ingredientes.length > 0 && (
             <fieldset>
               <legend className="text-sm font-semibold">{t('menu.sin')}</legend>
               <p className="text-xs text-suave">{t('menu.sinAyuda')}</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                {producto.ingredientesRemovibles.map((ingrediente) => {
+                {producto.ingredientes.map((ingrediente) => {
                   const activo = sin.includes(ingrediente.id)
                   return (
                     <button
@@ -157,7 +157,7 @@ export function DetalleProducto({
             <span className="text-sm font-semibold">{t('menu.nota')}</span>
             <textarea
               value={nota}
-              maxLength={140}
+              maxLength={300}
               rows={3}
               placeholder={t('menu.notaPlaceholder')}
               onChange={(evento) => setNota(evento.target.value)}
@@ -173,7 +173,7 @@ export function DetalleProducto({
               onAgregar({
                 cantidad,
                 adicionales: elegidos,
-                sinIngredientes: producto.ingredientesRemovibles.filter((item) => sin.includes(item.id)),
+                sinIngredientes: producto.ingredientes.filter((item) => sin.includes(item.id)),
                 nota,
               })
             }

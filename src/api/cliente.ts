@@ -1,13 +1,23 @@
 import { URL_API, usarMock } from '../config'
 import type {
+  ActualizacionPedido,
+  Categoria,
   CrearPedido,
   EstadoPedido,
-  MenuRespuesta,
   Mesa,
   Pedido,
   ReporteHoy,
 } from '../tipos'
 import { ErrorApi } from './errores'
+import {
+  leerActualizacion,
+  leerMenu,
+  leerMesa,
+  leerMesas,
+  leerPedido,
+  leerPedidos,
+  leerReporte,
+} from './forma'
 import {
   cambiarEstadoMock,
   crearPedidoMock,
@@ -30,20 +40,33 @@ async function solicitar<T>(ruta: string, init?: RequestInit): Promise<T> {
         ...init?.headers,
       },
     })
-  } catch {
-    throw new ErrorApi(0, 'Sin conexión con el servidor')
+  } catch (error) {
+    const mensaje = error instanceof Error && error.message ? error.message : 'Sin conexión con el servidor'
+    throw new ErrorApi(0, mensaje)
   }
   if (!respuesta.ok) {
     let mensaje = respuesta.statusText
     try {
-      mensaje = await respuesta.text()
+      const texto = await respuesta.text()
+      if (texto) {
+        try {
+          const cuerpo = JSON.parse(texto) as { error?: unknown }
+          mensaje = typeof cuerpo.error === 'string' ? cuerpo.error : texto
+        } catch {
+          mensaje = texto
+        }
+      }
     } catch {
       // El cuerpo vacío no cambia el estado HTTP.
     }
     throw new ErrorApi(respuesta.status, mensaje || 'Error del servidor')
   }
   if (respuesta.status === 204) return undefined as T
-  return (await respuesta.json()) as T
+  try {
+    return (await respuesta.json()) as T
+  } catch {
+    throw new ErrorApi(0, 'Respuesta inválida del servidor')
+  }
 }
 
 function query(params: Record<string, string | undefined>): string {
@@ -56,39 +79,45 @@ function query(params: Record<string, string | undefined>): string {
 }
 
 export const api = {
-  menu(): Promise<MenuRespuesta> {
-    if (usarMock) return menuMock()
-    return solicitar('/api/menu?lang=es')
+  async menu(): Promise<Categoria[]> {
+    const datos = usarMock ? await menuMock() : await solicitar<unknown>('/api/menu?lang=es')
+    return leerMenu(datos)
   },
-  mesas(): Promise<Mesa[]> {
-    if (usarMock) return mesasMock()
-    return solicitar('/api/mesas')
+  async mesas(): Promise<Mesa[]> {
+    const datos = usarMock ? await mesasMock() : await solicitar<unknown>('/api/mesas')
+    return leerMesas(datos)
   },
-  mesa(numero: number): Promise<Mesa> {
-    if (usarMock) return mesaMock(numero)
-    return solicitar(`/api/mesas/${numero}`)
+  async mesa(numero: number): Promise<Mesa> {
+    const datos = usarMock ? await mesaMock(numero) : await solicitar<unknown>(`/api/mesas/${numero}`)
+    return leerMesa(datos)
   },
-  crearPedido(cuerpo: CrearPedido): Promise<Pedido> {
-    if (usarMock) return crearPedidoMock(cuerpo)
-    return solicitar('/api/pedidos', { method: 'POST', body: JSON.stringify(cuerpo) })
+  async crearPedido(cuerpo: CrearPedido): Promise<Pedido> {
+    const datos = usarMock
+      ? await crearPedidoMock(cuerpo)
+      : await solicitar<unknown>('/api/pedidos', { method: 'POST', body: JSON.stringify(cuerpo) })
+    return leerPedido(datos)
   },
-  pedido(id: number): Promise<Pedido> {
-    if (usarMock) return pedidoMock(id)
-    return solicitar(`/api/pedidos/${id}`)
+  async pedido(id: number): Promise<Pedido> {
+    const datos = usarMock ? await pedidoMock(id) : await solicitar<unknown>(`/api/pedidos/${id}`)
+    return leerPedido(datos)
   },
-  pedidos(params: { estado?: EstadoPedido | ''; fecha?: string } = {}): Promise<Pedido[]> {
-    if (usarMock) return pedidosMock(params)
-    return solicitar(`/api/pedidos${query({ estado: params.estado, fecha: params.fecha })}`)
+  async pedidos(params: { estado?: EstadoPedido | ''; fecha?: string } = {}): Promise<Pedido[]> {
+    const datos = usarMock
+      ? await pedidosMock(params)
+      : await solicitar<unknown>(`/api/pedidos${query({ estado: params.estado, fecha: params.fecha })}`)
+    return leerPedidos(datos)
   },
-  cambiarEstado(id: number, estado: EstadoPedido): Promise<Pedido> {
-    if (usarMock) return cambiarEstadoMock(id, estado)
-    return solicitar(`/api/pedidos/${id}/estado`, {
-      method: 'PATCH',
-      body: JSON.stringify({ estado }),
-    })
+  async cambiarEstado(id: number, estado: EstadoPedido): Promise<ActualizacionPedido> {
+    const datos = usarMock
+      ? await cambiarEstadoMock(id, estado)
+      : await solicitar<unknown>(`/api/pedidos/${id}/estado`, {
+          method: 'PATCH',
+          body: JSON.stringify({ estado }),
+        })
+    return leerActualizacion(datos)
   },
-  reporteHoy(): Promise<ReporteHoy> {
-    if (usarMock) return reporteHoyMock()
-    return solicitar('/api/reportes/hoy')
+  async reporteHoy(): Promise<ReporteHoy> {
+    const datos = usarMock ? await reporteHoyMock() : await solicitar<unknown>('/api/reportes/hoy')
+    return leerReporte(datos)
   },
 }

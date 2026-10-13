@@ -20,10 +20,10 @@ describe('número de mesa del QR', () => {
 describe('carta localizada', () => {
   it('arma la carta en español', () => {
     const menu = localizarMenu()
-    expect(menu.categorias[0]?.nombre).toBe('Entradas')
-    const lomo = menu.categorias.flatMap((categoria) => categoria.productos).find((producto) => producto.id === 5)
+    expect(menu[0]?.nombre).toBe('Entradas')
+    const lomo = menu.flatMap((categoria) => categoria.productos).find((producto) => producto.id === 5)
     expect(lomo?.nombre).toBe('Lomo saltado')
     expect(lomo?.adicionales.length).toBeGreaterThan(0)
-    expect(lomo?.ingredientesRemovibles.length).toBeGreaterThan(0)
+    expect(lomo?.ingredientes.length).toBeGreaterThan(0)
   })
 })

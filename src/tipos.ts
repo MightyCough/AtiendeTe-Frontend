@@ -25,17 +25,14 @@ export interface Producto {
   imagenUrl: string | null
   disponible: boolean
   adicionales: Adicional[]
-  ingredientesRemovibles: Ingrediente[]
+  /** Los que el cliente puede quitar. En la API el campo se llama `ingredientes`. */
+  ingredientes: Ingrediente[]
 }
 
 export interface Categoria {
   id: number
   nombre: string
   productos: Producto[]
-}
-
-export interface MenuRespuesta {
-  categorias: Categoria[]
 }
 
 export interface Mesa {
@@ -45,13 +42,15 @@ export interface Mesa {
 }
 
 export interface ItemPedido {
+  id: number
   productoId: number
   nombre: string
   cantidad: number
   precioUnitario: number
   adicionales: Adicional[]
   sinIngredientes: Ingrediente[]
-  nota?: string
+  nota: string | null
+  notaEs: string | null
   subtotal: number
 }
 
@@ -63,6 +62,7 @@ export interface Pedido {
   total: number
   items: ItemPedido[]
   creadoEn: string
+  actualizadoEn: string
 }
 
 export interface CrearPedidoItem {

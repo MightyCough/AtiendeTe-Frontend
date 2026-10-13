@@ -41,7 +41,8 @@ function ExperienciaMesa({ numero }: { numero: number }) {
   const [ausente, setAusente] = useState(false)
   const [categorias, setCategorias] = useState<Categoria[] | null>(null)
   const [categoriaId, setCategoriaId] = useState<number | null>(null)
-  const [errorRed, setErrorRed] = useState(false)
+  const [errorMesa, setErrorMesa] = useState(false)
+  const [errorMenu, setErrorMenu] = useState(false)
   const [intento, setIntento] = useState(0)
   const [lineas, setLineas] = useState<LineaCarrito[]>(() => leerCarrito(numero))
   const [producto, setProducto] = useState<Producto | null>(null)
@@ -59,7 +60,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
 
   useEffect(() => {
     let vivo = true
-    setErrorRed(false)
+    setErrorMesa(false)
     api
       .mesa(numero)
       .then((datos) => {
@@ -70,7 +71,10 @@ function ExperienciaMesa({ numero }: { numero: number }) {
       .catch((error: unknown) => {
         if (!vivo) return
         if (error instanceof ErrorApi && error.estado === 404) setAusente(true)
-        else setErrorRed(true)
+        else {
+          setMesa(null)
+          setErrorMesa(true)
+        }
       })
     return () => {
       vivo = false
@@ -79,19 +83,27 @@ function ExperienciaMesa({ numero }: { numero: number }) {
 
   useEffect(() => {
     let vivo = true
+    setErrorMenu(false)
     api
       .menu()
       .then((datos) => {
         if (!vivo) return
-        setCategorias(datos.categorias)
+        if (!Array.isArray(datos)) {
+          setCategorias(null)
+          setErrorMenu(true)
+          return
+        }
+        setCategorias(datos)
         setCategoriaId((actual) =>
-          datos.categorias.some((categoria) => categoria.id === actual) ? actual : (datos.categorias[0]?.id ?? null),
+          datos.some((categoria) => categoria.id === actual) ? actual : (datos[0]?.id ?? null),
         )
-        setLineas((previas) => sincronizarNombres(previas, datos.categorias))
-        setErrorRed(false)
+        setLineas((previas) => sincronizarNombres(previas, datos))
+        setErrorMenu(false)
       })
       .catch(() => {
-        if (vivo) setErrorRed(true)
+        if (!vivo) return
+        setCategorias(null)
+        setErrorMenu(true)
       })
     return () => {
       vivo = false
@@ -105,6 +117,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
     )
   })
 
+  const errorRed = errorMesa || errorMenu
   const total = useMemo(() => totalCarrito(lineas), [lineas])
   const unidades = lineas.reduce((suma, linea) => suma + linea.cantidad, 0)
 

@@ -3,6 +3,7 @@ export const es = {
     cargando: 'Cargando…',
     reintentar: 'Reintentar',
     errorRed: 'No pudimos conectar. Revisa que el servidor esté encendido y vuelve a intentar.',
+    errorPantalla: 'No pudimos mostrar esta pantalla. Vuelve a intentar.',
     cerrar: 'Cerrar',
     atras: 'Volver',
     enVivo: 'En vivo',

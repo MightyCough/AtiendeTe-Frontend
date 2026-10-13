@@ -2,19 +2,20 @@ import { buscarProductoFuente, localizarMenu } from '../datos/catalogo'
 import { aCentimos, desdeCentimos, precioLinea } from '../lib/dinero'
 import { diaLocal, fechaHoyLocal } from '../lib/formato'
 import type {
+  ActualizacionPedido,
+  Categoria,
   ConexionMesa,
   CrearPedido,
   EstadoPedido,
   Idioma,
   ItemPedido,
-  MenuRespuesta,
   Mesa,
   Pedido,
   ReporteHoy,
 } from '../tipos'
 import { ErrorApi } from './errores'
 
-const CLAVE_DB = 'atiendete-mock-db-v1'
+const CLAVE_DB = 'atiendete-mock-db-v2'
 const CLAVE_SIM = 'atiendete-mock-sim'
 const CANAL = 'atiendete-mock'
 
@@ -117,6 +118,7 @@ function semilla(): BaseDatos {
 }
 
 function armarItem(
+  id: number,
   productoId: number,
   cantidad: number,
   adicionalesIds: number[],
@@ -125,13 +127,13 @@ function armarItem(
 ): ItemPedido {
   const producto = buscarProductoFuente(productoId)
   if (!producto) throw new ErrorApi(400, 'Producto desconocido')
-  const adicionales = adicionalesIds.map((id) => {
-    const extra = producto.adicionales.find((item) => item.id === id)
+  const adicionales = adicionalesIds.map((extraId) => {
+    const extra = producto.adicionales.find((item) => item.id === extraId)
     if (!extra) throw new ErrorApi(400, 'Adicional desconocido')
     return { id: extra.id, nombre: extra.nombre, precioExtra: extra.precioExtra }
   })
-  const sinIngredientes = sinIds.map((id) => {
-    const ingrediente = producto.ingredientesRemovibles.find((item) => item.id === id)
+  const sinIngredientes = sinIds.map((ingredienteId) => {
+    const ingrediente = producto.ingredientes.find((item) => item.id === ingredienteId)
     if (!ingrediente) throw new ErrorApi(400, 'Ingrediente desconocido')
     return { id: ingrediente.id, nombre: ingrediente.nombre }
   })
@@ -140,14 +142,17 @@ function armarItem(
     adicionales.map((extra) => extra.precioExtra),
     cantidad,
   )
+  const texto = nota?.trim() ? nota.trim() : null
   return {
+    id,
     productoId,
     nombre: producto.nombre,
     cantidad,
     precioUnitario: producto.precio,
     adicionales,
     sinIngredientes,
-    ...(nota ? { nota } : {}),
+    nota: texto,
+    notaEs: texto,
     subtotal,
   }
 }
@@ -162,8 +167,8 @@ function armarPedido(
     items: Array<{ productoId: number; cantidad: number; adicionales: number[]; sinIngredientes: number[]; nota?: string }>
   },
 ): Pedido {
-  const items = datos.items.map((item) =>
-    armarItem(item.productoId, item.cantidad, item.adicionales, item.sinIngredientes, item.nota),
+  const items = datos.items.map((item, indice) =>
+    armarItem(id * 100 + indice + 1, item.productoId, item.cantidad, item.adicionales, item.sinIngredientes, item.nota),
   )
   const total = desdeCentimos(items.reduce((suma, item) => suma + aCentimos(item.subtotal), 0))
   return {
@@ -174,6 +179,7 @@ function armarPedido(
     total,
     items,
     creadoEn: datos.creadoEn,
+    actualizadoEn: datos.creadoEn,
   }
 }
 
@@ -267,7 +273,7 @@ export function reiniciarMock(): void {
   window.location.reload()
 }
 
-export async function menuMock(): Promise<MenuRespuesta> {
+export async function menuMock(): Promise<Categoria[]> {
   await esperar()
   return localizarMenu()
 }
@@ -293,24 +299,30 @@ export async function crearPedidoMock(cuerpo: CrearPedido): Promise<Pedido> {
   if (!db.mesas.some((mesa) => mesa.numero === cuerpo.mesa)) {
     throw new ErrorApi(404, 'Mesa no encontrada')
   }
-  const items = cuerpo.items.map((item) => {
+  const baseItem = db.pedidos.reduce(
+    (max, pedido) => pedido.items.reduce((mayor, item) => Math.max(mayor, item.id), max),
+    0,
+  )
+  const items = cuerpo.items.map((item, indice) => {
     if (!Number.isInteger(item.cantidad) || item.cantidad < 1 || item.cantidad > 20) {
       throw new ErrorApi(400, 'Cantidad inválida')
     }
     const producto = buscarProductoFuente(item.productoId)
     if (!producto || !producto.disponible) throw new ErrorApi(400, 'Producto no disponible')
     const nota = item.nota?.trim()
-    if (nota && nota.length > 140) throw new ErrorApi(400, 'Nota demasiado larga')
-    return armarItem(item.productoId, item.cantidad, item.adicionales ?? [], item.sinIngredientes ?? [], nota || undefined)
+    if (nota && nota.length > 300) throw new ErrorApi(400, 'Nota demasiado larga')
+    return armarItem(baseItem + indice + 1, item.productoId, item.cantidad, item.adicionales ?? [], item.sinIngredientes ?? [], nota || undefined)
   })
+  const ahora = new Date().toISOString()
   const pedido: Pedido = {
     id: db.seq,
     mesa: cuerpo.mesa,
-    idioma: 'es',
+    idioma: cuerpo.idioma,
     estado: 'RECIBIDO',
     total: desdeCentimos(items.reduce((suma, item) => suma + aCentimos(item.subtotal), 0)),
     items,
-    creadoEn: new Date().toISOString(),
+    creadoEn: ahora,
+    actualizadoEn: ahora,
   }
   db.seq += 1
   db.pedidos.push(pedido)
@@ -334,19 +346,20 @@ export async function pedidosMock(params: { estado?: EstadoPedido | ''; fecha?: 
       if (params.fecha && diaLocal(pedido.creadoEn) !== params.fecha) return false
       return true
     })
-    .sort((a, b) => b.creadoEn.localeCompare(a.creadoEn))
+    .sort((a, b) => a.creadoEn.localeCompare(b.creadoEn))
 }
 
-export async function cambiarEstadoMock(id: number, estado: EstadoPedido): Promise<Pedido> {
+export async function cambiarEstadoMock(id: number, estado: EstadoPedido): Promise<ActualizacionPedido> {
   await esperar(180)
   const db = leerDb()
   const pedido = db.pedidos.find((item) => item.id === id)
   if (!pedido) throw new ErrorApi(404, 'Pedido no encontrado')
   pedido.estado = estado
+  pedido.actualizadoEn = new Date().toISOString()
   guardarDb(db)
   const aviso = { id: pedido.id, mesa: pedido.mesa, estado: pedido.estado }
   emitir('pedido:actualizado', aviso)
-  return pedido
+  return aviso
 }
 
 export async function reporteHoyMock(): Promise<ReporteHoy> {
@@ -377,7 +390,7 @@ export async function reporteHoyMock(): Promise<ReporteHoy> {
       cantidad: item.cantidad,
       total: desdeCentimos(item.centimos),
     }))
-    .sort((a, b) => b.cantidad - a.cantidad || b.total - a.total)
+    .sort((a, b) => b.cantidad - a.cantidad || b.total - a.total || a.productoId - b.productoId)
     .slice(0, 5)
   return { pedidos: pedidos.length, totalVendido, topProductos }
 }

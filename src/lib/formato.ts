@@ -20,13 +20,18 @@ export function haceCuanto(iso: string, ahora = Date.now()): string {
   return `hace ${horas} h`
 }
 
-/** Día civil local (YYYY-MM-DD) de un instante ISO. La carta y los reportes usan este día, no el día UTC. */
+/** YYYY-MM-DD en America/Lima. El filtro `fecha` y el reporte de hoy del backend usan ese huso, no UTC ni el reloj del navegador. */
 export function diaLocal(iso: string): string {
   const fecha = new Date(iso)
   if (Number.isNaN(fecha.getTime())) return ''
-  const mes = String(fecha.getMonth() + 1).padStart(2, '0')
-  const dia = String(fecha.getDate()).padStart(2, '0')
-  return `${fecha.getFullYear()}-${mes}-${dia}`
+  const partes = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Lima',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(fecha)
+  const tomar = (tipo: Intl.DateTimeFormatPartTypes) => partes.find((parte) => parte.type === tipo)?.value ?? ''
+  return `${tomar('year')}-${tomar('month')}-${tomar('day')}`
 }
 
 export function fechaHoyLocal(): string {

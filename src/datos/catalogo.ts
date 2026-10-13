@@ -1,4 +1,4 @@
-import type { MenuRespuesta } from '../tipos'
+import type { Categoria } from '../tipos'
 
 interface AdicionalFuente {
   id: number
@@ -19,7 +19,7 @@ interface ProductoFuente {
   nombre: string
   descripcion: string
   adicionales: AdicionalFuente[]
-  ingredientesRemovibles: IngredienteFuente[]
+  ingredientes: IngredienteFuente[]
 }
 
 interface CategoriaFuente {
@@ -64,7 +64,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Papa a la huancaína',
         descripcion: 'Papa amarilla, salsa de ají amarillo y queso fresco, con huevo y aceituna.',
         adicionales: [huevo, ajiExtra],
-        ingredientesRemovibles: [aceituna, aji],
+        ingredientes: [aceituna, aji],
       },
       {
         id: 2,
@@ -74,7 +74,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Tequeños de lomo',
         descripcion: 'Rollitos crocantes de lomo y queso, con salsa criolla al costado.',
         adicionales: [salsa],
-        ingredientesRemovibles: [cebolla],
+        ingredientes: [cebolla],
       },
       {
         id: 3,
@@ -84,7 +84,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Causa de pollo',
         descripcion: 'Causa de papa amarilla rellena de pollo, con palta y un toque de limón.',
         adicionales: [palta],
-        ingredientesRemovibles: [aceituna, limon],
+        ingredientes: [aceituna, limon],
       },
       {
         id: 4,
@@ -94,7 +94,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Chicharrón de pota',
         descripcion: 'Pota crocante, yuca dorada y salsa criolla.',
         adicionales: [yuca, salsa],
-        ingredientesRemovibles: [cebolla, aji],
+        ingredientes: [cebolla, aji],
       },
     ],
   },
@@ -110,7 +110,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Lomo saltado',
         descripcion: 'Lomo, cebolla y tomate salteados, con papas fritas y arroz.',
         adicionales: [huevo, papas, arroz],
-        ingredientesRemovibles: [cebolla, aji, tomate],
+        ingredientes: [cebolla, aji, tomate],
       },
       {
         id: 6,
@@ -120,7 +120,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Ají de gallina',
         descripcion: 'Crema de ají amarillo y gallina deshilachada, con arroz y aceituna.',
         adicionales: [huevo, arroz],
-        ingredientesRemovibles: [aceituna, aji],
+        ingredientes: [aceituna, aji],
       },
       {
         id: 7,
@@ -130,7 +130,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Pachamanca de la casa',
         descripcion: 'Carnes y tubérculos al estilo de la sierra, con hierba buena y ají.',
         adicionales: [porcion, ajiExtra],
-        ingredientesRemovibles: [cilantro, aji],
+        ingredientes: [cilantro, aji],
       },
       {
         id: 8,
@@ -140,7 +140,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Tallarín saltado',
         descripcion: 'Tallarines salteados con lomo, verduras y sillao.',
         adicionales: [huevo, carne],
-        ingredientesRemovibles: [cebolla, aji],
+        ingredientes: [cebolla, aji],
       },
       {
         id: 9,
@@ -150,7 +150,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Trucha frita',
         descripcion: 'Trucha del día, yuca y ensalada. Hoy no hay en cocina.',
         adicionales: [yuca, { id: 115, precioExtra: 1, nombre: 'Limón extra' }],
-        ingredientesRemovibles: [limon],
+        ingredientes: [limon],
       },
     ],
   },
@@ -166,7 +166,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Chicha morada',
         descripcion: 'Jarra de maíz morado, piña y canela.',
         adicionales: [],
-        ingredientesRemovibles: [azucar],
+        ingredientes: [azucar],
       },
       {
         id: 11,
@@ -176,7 +176,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Limonada',
         descripcion: 'Limón fresco, hierbabuena y hielo.',
         adicionales: [],
-        ingredientesRemovibles: [azucar],
+        ingredientes: [azucar],
       },
       {
         id: 12,
@@ -186,7 +186,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Inca Kola',
         descripcion: 'Botella bien fría.',
         adicionales: [],
-        ingredientesRemovibles: [],
+        ingredientes: [],
       },
       {
         id: 13,
@@ -196,7 +196,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Café pasado',
         descripcion: 'Café de la mañana, servido en taza grande.',
         adicionales: [shot, leche],
-        ingredientesRemovibles: [azucar],
+        ingredientes: [azucar],
       },
     ],
   },
@@ -212,7 +212,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Picarones',
         descripcion: 'Aros de zapallo y camote, con miel de chancaca.',
         adicionales: [miel],
-        ingredientesRemovibles: [],
+        ingredientes: [],
       },
       {
         id: 15,
@@ -222,7 +222,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Suspiro a la limeña',
         descripcion: 'Manjar blanco y merengue de oporto, con canela.',
         adicionales: [],
-        ingredientesRemovibles: [],
+        ingredientes: [],
       },
       {
         id: 16,
@@ -232,7 +232,7 @@ export const CATALOGO: CategoriaFuente[] = [
         nombre: 'Mazamorra morada',
         descripcion: 'Postre de maíz morado y frutas, tibio o frío.',
         adicionales: [fruta],
-        ingredientesRemovibles: [],
+        ingredientes: [],
       },
     ],
   },
@@ -246,31 +246,29 @@ export function buscarProductoFuente(productoId: number): ProductoFuente | undef
   return undefined
 }
 
-/** La carta de demostración sale siempre en español. */
-export function localizarMenu(): MenuRespuesta {
-  return {
-    categorias: CATALOGO.map((categoria) => ({
-      id: categoria.id,
-      nombre: categoria.nombre,
-      productos: categoria.productos.map((producto) => ({
-        id: producto.id,
-        nombre: producto.nombre,
-        descripcion: producto.descripcion,
-        precio: producto.precio,
-        imagenUrl: producto.imagenUrl,
-        disponible: producto.disponible,
-        adicionales: producto.adicionales.map((extra) => ({
-          id: extra.id,
-          nombre: extra.nombre,
-          precioExtra: extra.precioExtra,
-        })),
-        ingredientesRemovibles: producto.ingredientesRemovibles.map((ingrediente) => ({
-          id: ingrediente.id,
-          nombre: ingrediente.nombre,
-        })),
+/** La carta de demostración sale siempre en español. Misma forma que GET /api/menu: un arreglo. */
+export function localizarMenu(): Categoria[] {
+  return CATALOGO.map((categoria) => ({
+    id: categoria.id,
+    nombre: categoria.nombre,
+    productos: categoria.productos.map((producto) => ({
+      id: producto.id,
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      precio: producto.precio,
+      imagenUrl: producto.imagenUrl,
+      disponible: producto.disponible,
+      adicionales: producto.adicionales.map((extra) => ({
+        id: extra.id,
+        nombre: extra.nombre,
+        precioExtra: extra.precioExtra,
+      })),
+      ingredientes: producto.ingredientes.map((ingrediente) => ({
+        id: ingrediente.id,
+        nombre: ingrediente.nombre,
       })),
     })),
-  }
+  }))
 }
 
 /** Ilustración local cuando el producto no trae imagenUrl. */

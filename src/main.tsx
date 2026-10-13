@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { prepararMock } from './api/mock'
 import { App } from './App'
+import { ErrorBoundary } from './componentes/ErrorBoundary'
 import { usarMock } from './config'
 import './i18n'
 import './index.css'
@@ -18,6 +19,8 @@ if (!raiz) throw new Error('No se encontró #root')
 
 createRoot(raiz).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
