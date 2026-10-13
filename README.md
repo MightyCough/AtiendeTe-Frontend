@@ -177,7 +177,7 @@ Respuesta: el pedido actualizado.
 
 ```json
 {
-  "pedidos": [],
+  "pedidos": 12,
   "totalVendido": 128.5,
   "topProductos": [
     { "productoId": 5, "nombre": "Lomo saltado", "cantidad": 4, "total": 140 }
@@ -185,7 +185,7 @@ Respuesta: el pedido actualizado.
 }
 ```
 
-`totalVendido` suma todos los pedidos del día, también los que siguen en cocina. `topProductos` ordena por unidades.
+`pedidos` es la cantidad del día, no el listado. El detalle se pide con `GET /api/pedidos?fecha=YYYY-MM-DD`. `totalVendido` suma todos los pedidos del día, también los que siguen en cocina. `topProductos` ordena por unidades.
 
 ### Socket.IO
 
