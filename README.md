@@ -53,7 +53,7 @@ Para sacar la IP en Linux: `hostname -I`.
 
 Con `VITE_USE_MOCK=true` la interfaz no necesita backend:
 
-- La carta, las mesas 1–8 y cuatro pedidos de ejemplo viven en `localStorage` (`atiendete-mock-db-v1`).
+- La carta, las mesas 1–8 y cuatro pedidos de ejemplo viven en `localStorage` (`atiendete-mock-db-v2`).
 - Los eventos `pedido:nuevo`, `pedido:actualizado` y `mesa:conexion` se reparten entre pestañas del mismo navegador con `BroadcastChannel`.
 - La mesa 8 alterna en línea / fuera de línea cada ~18 s para ver el tablero de administración en vivo.
 - En Administración hay un enlace para reiniciar los datos de demostración.
@@ -77,27 +77,27 @@ Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `
 
 ### `GET /api/menu?lang=es`
 
+La respuesta es un arreglo de categorías, no un objeto. `ingredientes` son los que el cliente puede quitar.
+
 ```json
-{
-  "categorias": [
-    {
-      "id": 1,
-      "nombre": "Entradas",
-      "productos": [
-        {
-          "id": 1,
-          "nombre": "Papa a la huancaína",
-          "descripcion": "Papa amarilla y salsa de ají.",
-          "precio": 14,
-          "imagenUrl": null,
-          "disponible": true,
-          "adicionales": [{ "id": 101, "nombre": "Huevo frito", "precioExtra": 3 }],
-          "ingredientesRemovibles": [{ "id": 204, "nombre": "Aceituna" }]
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "nombre": "Entradas",
+    "productos": [
+      {
+        "id": 1,
+        "nombre": "Papa a la huancaína",
+        "descripcion": "Papa amarilla y salsa de ají.",
+        "precio": 14,
+        "imagenUrl": null,
+        "disponible": true,
+        "adicionales": [{ "id": 101, "nombre": "Huevo frito", "precioExtra": 3 }],
+        "ingredientes": [{ "id": 204, "nombre": "Aceituna" }]
+      }
+    ]
+  }
+]
 ```
 
 `imagenUrl` es una URL absoluta o `null`. Si viene vacía, la interfaz dibuja una ilustración.
@@ -132,7 +132,7 @@ Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `
 }
 ```
 
-`nota` es opcional (máximo 140 caracteres). `cantidad` va de 1 a 20. Respuesta: el pedido creado.
+`nota` es opcional (máximo 300 caracteres). `cantidad` va de 1 a 20. Respuesta: el pedido creado. `nota` es el texto original y `notaEs` la versión en español; si no hay nota, ambos son `null`.
 
 ```json
 {
@@ -142,8 +142,10 @@ Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `
   "estado": "RECIBIDO",
   "total": 70,
   "creadoEn": "2026-10-10T18:05:00.000Z",
+  "actualizadoEn": "2026-10-10T18:05:00.000Z",
   "items": [
     {
+      "id": 30,
       "productoId": 5,
       "nombre": "Lomo saltado",
       "cantidad": 2,
@@ -151,6 +153,7 @@ Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `
       "adicionales": [{ "id": 101, "nombre": "Huevo frito", "precioExtra": 3 }],
       "sinIngredientes": [{ "id": 201, "nombre": "Cebolla" }],
       "nota": "Término medio",
+      "notaEs": "Término medio",
       "subtotal": 70
     }
   ]
@@ -159,9 +162,9 @@ Base: `VITE_API_URL`. Precios en soles. Estados: `RECIBIDO`, `EN_PREPARACION`, `
 
 El total de una línea es `(precioUnitario + suma de precioExtra) × cantidad`.
 
-`GET /api/pedidos/:id` devuelve el mismo objeto. `404` si no existe.
+`GET /api/pedidos/:id` devuelve el mismo objeto, en el idioma del pedido. `404` si no existe.
 
-`GET /api/pedidos?estado=&fecha=` filtra por estado y por día civil del local (`fecha=YYYY-MM-DD`). Los dos parámetros son opcionales. Los nombres van en español.
+`GET /api/pedidos?estado=&fecha=` es la vista de cocina. Los dos parámetros son opcionales. `fecha` es `YYYY-MM-DD` en `America/Lima`. El orden es el más antiguo primero y los nombres van en español. La cocina muestra `notaEs`.
 
 `PATCH /api/pedidos/:id/estado`
 
@@ -169,7 +172,7 @@ El total de una línea es `(precioUnitario + suma de precioExtra) × cantidad`.
 { "estado": "EN_PREPARACION" }
 ```
 
-Respuesta: el pedido actualizado.
+Respuesta: `{ "id": 12, "mesa": 1, "estado": "EN_PREPARACION" }`. No devuelve el pedido entero.
 
 ### Reporte
 
@@ -193,13 +196,13 @@ El cliente conecta al mismo origen que `VITE_API_URL`, path por defecto `/socket
 
 | Evento | Cuerpo |
 | --- | --- |
-| `pedido:nuevo` | Pedido completo, igual que el `POST`. |
+| `pedido:nuevo` | Pedido completo en español, la misma forma que `GET /api/pedidos`. |
 | `pedido:actualizado` | `{ "id": 12, "mesa": 1, "estado": "LISTO" }` |
 | `mesa:conexion` | `{ "numero": 1, "online": true }` |
 
 ## Pruebas
 
-`npm test` cubre los totales del carrito (incluidos adicionales y céntimos), que los textos de la interfaz estén en español, la lectura de `?mesa=` y la carta de demostración.
+`npm test` cubre los totales del carrito (incluidos adicionales y céntimos), que los textos de la interfaz estén en español, la lectura de `?mesa=`, la carta de demostración y que el menú y el reporte coincidan con el backend.
 
 ## Build
 
