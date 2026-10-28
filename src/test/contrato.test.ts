@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { leerMenu, leerReporte } from '../api/forma'
+import { leerCambioMesa, leerMenu, leerReporte } from '../api/forma'
 import { localizarMenu } from '../datos/catalogo'
 import { diaLocal } from '../lib/formato'
 
@@ -13,6 +13,12 @@ describe('contrato con el backend', () => {
   it('el reporte de hoy cuenta pedidos', () => {
     expect(leerReporte({ pedidos: 2, totalVendido: 10, topProductos: [] }).pedidos).toBe(2)
     expect(() => leerReporte({ pedidos: [], totalVendido: 0, topProductos: [] })).toThrow()
+  })
+
+  it('PATCH /api/mesas/:numero/estado devuelve numero y uno de los tres estados', () => {
+    expect(leerCambioMesa({ numero: 1, estado: 'RESERVADA' })).toEqual({ numero: 1, estado: 'RESERVADA' })
+    expect(() => leerCambioMesa({ numero: 1, estado: 'LISTO' })).toThrow()
+    expect(() => leerCambioMesa({ numero: '1', estado: 'LIBRE' })).toThrow()
   })
 
   it('el día del filtro fecha es el de Lima, no el UTC', () => {

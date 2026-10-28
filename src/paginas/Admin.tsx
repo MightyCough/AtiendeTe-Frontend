@@ -9,13 +9,20 @@ import { usarMock } from '../config'
 import { useConexion, useEvento } from '../hooks/useEvento'
 import { formatearSoles } from '../lib/dinero'
 import { fechaHoyLocal, formatearHora } from '../lib/formato'
-import type { EstadoPedido, Mesa, Pedido, ReporteHoy } from '../tipos'
+import { ESTADOS_MESA, type EstadoMesa, type EstadoPedido, type Mesa, type Pedido, type ReporteHoy } from '../tipos'
 
 const TONO: Record<EstadoPedido, string> = {
   RECIBIDO: 'bg-[#f4e3c4] text-[#5c4310]',
   EN_PREPARACION: 'bg-[#f6d3c2] text-[#8a3418]',
   LISTO: 'bg-[#d7ead4] text-[#1e5a32]',
   ENTREGADO: 'bg-[#ece7df] text-[#5c534c]',
+}
+
+// Los colores siguen al LED de la mesa: verde libre, rojo ocupada, ámbar reservada.
+const TONO_MESA: Record<EstadoMesa, string> = {
+  LIBRE: 'bg-[#d7ead4] text-[#1e5a32]',
+  OCUPADA: 'bg-[#f6d3c2] text-[#8a3418]',
+  RESERVADA: 'bg-[#f4e3c4] text-[#5c4310]',
 }
 
 export function AdminPagina() {
@@ -28,6 +35,8 @@ export function AdminPagina() {
   const [abierto, setAbierto] = useState<number | null>(null)
   const [enVivo, setEnVivo] = useState(usarMock)
   const [intento, setIntento] = useState(0)
+  const [guardandoMesa, setGuardandoMesa] = useState<number | null>(null)
+  const [errorMesa, setErrorMesa] = useState(false)
 
   useEffect(() => {
     document.title = `${t('admin.titulo')} · AtiendeTe`
@@ -48,6 +57,20 @@ export function AdminPagina() {
     void cargar()
   }, [cargar, intento])
 
+  const cambiarMesa = useCallback((numero: number, estado: EstadoMesa) => {
+    setGuardandoMesa(numero)
+    setErrorMesa(false)
+    api
+      .cambiarEstadoMesa(numero, estado)
+      .then((cambio) => {
+        setMesas((previas) =>
+          previas.map((mesa) => (mesa.numero === cambio.numero ? { ...mesa, estado: cambio.estado } : mesa)),
+        )
+      })
+      .catch(() => setErrorMesa(true))
+      .finally(() => setGuardandoMesa(null))
+  }, [])
+
   useConexion(setEnVivo)
   useEvento('pedido:nuevo', () => void cargar())
   useEvento('pedido:actualizado', () => void cargar())
@@ -58,6 +81,12 @@ export function AdminPagina() {
           ? { ...mesa, online: dato.online, ultimaConexion: new Date().toISOString() }
           : mesa,
       ),
+    )
+  })
+  // Otra caja o un pedido nuevo pueden cambiar la mesa mientras esta pantalla está abierta.
+  useEvento('mesa:estado', (dato) => {
+    setMesas((previas) =>
+      previas.map((mesa) => (mesa.numero === dato.numero ? { ...mesa, estado: dato.estado } : mesa)),
     )
   })
 
@@ -143,10 +172,21 @@ export function AdminPagina() {
 
           <article className="rounded-3xl bg-pizarra p-5 ring-1 ring-linea">
             <h2 className="font-serif text-2xl">{t('admin.mesas')}</h2>
-            <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <p className="mt-1 text-sm text-suave">{t('admin.mesasAyuda')}</p>
+            {errorMesa && (
+              <p role="alert" className="mt-3 rounded-2xl bg-crema px-3 py-2 text-sm font-semibold text-[#8a3418]">
+                {t('admin.errorMesa')}
+              </p>
+            )}
+            <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {mesas.map((mesa) => (
                 <li key={mesa.numero} className="rounded-2xl bg-crema px-3 py-3">
-                  <p className="font-serif text-xl">{t('menu.mesa', { numero: mesa.numero })}</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-serif text-xl">{t('menu.mesa', { numero: mesa.numero })}</p>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${TONO_MESA[mesa.estado] ?? ''}`}>
+                      {mesa.estado ? t(`admin.estadoMesa.${mesa.estado}`) : '—'}
+                    </span>
+                  </div>
                   <p className="mt-1 inline-flex items-center gap-2 text-sm">
                     <span className={`h-2.5 w-2.5 rounded-full ${mesa.online ? 'bg-emerald-500 punto-vivo' : 'bg-stone-400'}`} />
                     {mesa.online ? t('admin.enLinea') : t('admin.fueraDeLinea')}
@@ -154,6 +194,22 @@ export function AdminPagina() {
                   <p className="mt-1 text-xs text-suave">
                     {mesa.ultimaConexion ? formatearHora(mesa.ultimaConexion) : t('admin.sinConexion')}
                   </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {ESTADOS_MESA.map((estado) => (
+                      <button
+                        key={estado}
+                        type="button"
+                        onClick={() => cambiarMesa(mesa.numero, estado)}
+                        disabled={guardandoMesa === mesa.numero}
+                        aria-pressed={mesa.estado === estado}
+                        className={`rounded-full px-3 py-1 text-xs font-semibold disabled:opacity-60 ${
+                          mesa.estado === estado ? 'bg-oliva text-papel' : 'bg-pizarra text-tinta ring-1 ring-linea'
+                        }`}
+                      >
+                        {t(`admin.estadoMesa.${estado}`)}
+                      </button>
+                    ))}
+                  </div>
                 </li>
               ))}
             </ul>

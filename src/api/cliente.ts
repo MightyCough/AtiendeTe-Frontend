@@ -1,8 +1,10 @@
 import { URL_API, usarMock } from '../config'
 import type {
   ActualizacionPedido,
+  CambioEstadoMesa,
   Categoria,
   CrearPedido,
+  EstadoMesa,
   EstadoPedido,
   Mesa,
   Pedido,
@@ -11,6 +13,7 @@ import type {
 import { ErrorApi } from './errores'
 import {
   leerActualizacion,
+  leerCambioMesa,
   leerMenu,
   leerMesa,
   leerMesas,
@@ -19,6 +22,7 @@ import {
   leerReporte,
 } from './forma'
 import {
+  cambiarEstadoMesaMock,
   cambiarEstadoMock,
   crearPedidoMock,
   menuMock,
@@ -90,6 +94,15 @@ export const api = {
   async mesa(numero: number): Promise<Mesa> {
     const datos = usarMock ? await mesaMock(numero) : await solicitar<unknown>(`/api/mesas/${numero}`)
     return leerMesa(datos)
+  },
+  async cambiarEstadoMesa(numero: number, estado: EstadoMesa): Promise<CambioEstadoMesa> {
+    const datos = usarMock
+      ? await cambiarEstadoMesaMock(numero, estado)
+      : await solicitar<unknown>(`/api/mesas/${numero}/estado`, {
+          method: 'PATCH',
+          body: JSON.stringify({ estado }),
+        })
+    return leerCambioMesa(datos)
   },
   async crearPedido(cuerpo: CrearPedido): Promise<Pedido> {
     const datos = usarMock
