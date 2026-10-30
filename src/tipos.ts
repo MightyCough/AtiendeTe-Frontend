@@ -35,10 +35,22 @@ export interface Categoria {
   productos: Producto[]
 }
 
+/** Lo que muestra el LED de la mesa al cliente que entra. Lo cambia la caja. */
+export type EstadoMesa = 'LIBRE' | 'OCUPADA' | 'RESERVADA'
+
+export const ESTADOS_MESA: EstadoMesa[] = ['LIBRE', 'OCUPADA', 'RESERVADA']
+
 export interface Mesa {
   numero: number
+  /** La placa de la mesa está conectada. No tiene que ver con `estado`. */
   online: boolean
   ultimaConexion: string | null
+  estado: EstadoMesa
+}
+
+export interface CambioEstadoMesa {
+  numero: number
+  estado: EstadoMesa
 }
 
 export interface ItemPedido {

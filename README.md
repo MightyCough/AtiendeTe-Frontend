@@ -1,6 +1,6 @@
 # AtiendeTe
 
-Carta digital para el curso de IoT de la **Universidad de Huánuco**. Cada mesa tiene un QR. El cliente pide desde el celular, la cocina cambia el estado del pedido y un ESP32 con LED RGB (en el backend, no en este repo) repite ese estado en la mesa.
+Carta digital para el curso de IoT de la **Universidad de Huánuco**. Cada mesa tiene un QR. El cliente pide desde el celular y la cocina cambia el estado del pedido. Un ESP32 con LED RGB (en el backend, no en este repo) muestra a quien entra al local si cada mesa está libre, ocupada o reservada; ese estado lo fija la caja en `/admin`.
 
 Todo corre en la red local: el portátil sirve esta interfaz y el API; los celulares entran por la WiFi del salón.
 
@@ -11,7 +11,7 @@ Todo corre en la red local: el portátil sirve esta interfaz y el API; los celul
 | `/menu?mesa=N` | Cliente | Carta, carrito y confirmación. Si `mesa` falta o no es válida, muestra un error. |
 | `/pedido/:id` | Cliente | Estado en vivo: Recibido → En preparación → Listo → Entregado. |
 | `/cocina` | Cocina | Tablero de pedidos. Avisos con sonido y botones grandes para avanzar. |
-| `/admin` | Caja | Pedidos de hoy, total vendido, productos más pedidos y mesas en línea / fuera de línea. |
+| `/admin` | Caja | Pedidos de hoy, total vendido, productos más pedidos, mesas en línea / fuera de línea y el estado de cada mesa (libre, ocupada, reservada), que se cambia con un botón. |
 | `/admin/qr` | Caja | Hoja para imprimir un QR por mesa. |
 
 Toda la interfaz está en español. No hay cambio de idioma. Comentarios del código, en español.
@@ -53,8 +53,8 @@ Para sacar la IP en Linux: `hostname -I`.
 
 Con `VITE_USE_MOCK=true` la interfaz no necesita backend:
 
-- La carta, las mesas 1–8 y cuatro pedidos de ejemplo viven en `localStorage` (`atiendete-mock-db-v2`).
-- Los eventos `pedido:nuevo`, `pedido:actualizado` y `mesa:conexion` se reparten entre pestañas del mismo navegador con `BroadcastChannel`.
+- La carta, las mesas 1–8 y cuatro pedidos de ejemplo viven en `localStorage` (`atiendete-mock-db-v3`).
+- Los eventos `pedido:nuevo`, `pedido:actualizado`, `mesa:conexion` y `mesa:estado` se reparten entre pestañas del mismo navegador con `BroadcastChannel`.
 - La mesa 8 alterna en línea / fuera de línea cada ~18 s para ver el tablero de administración en vivo.
 - En Administración hay un enlace para reiniciar los datos de demostración.
 
@@ -107,10 +107,12 @@ La respuesta es un arreglo de categorías, no un objeto. `ingredientes` son los 
 `GET /api/mesas`
 
 ```json
-[{ "numero": 1, "online": true, "ultimaConexion": "2026-10-10T18:00:00.000Z" }]
+[{ "numero": 1, "online": true, "ultimaConexion": "2026-10-10T18:00:00.000Z", "estado": "LIBRE" }]
 ```
 
-`GET /api/mesas/:numero` devuelve el mismo objeto. `404` si la mesa no existe. `ultimaConexion` puede ser `null`.
+`GET /api/mesas/:numero` devuelve el mismo objeto. `404` si la mesa no existe. `ultimaConexion` puede ser `null`. `online` es si la placa de la mesa está conectada; `estado` (`LIBRE`, `OCUPADA`, `RESERVADA`) es lo que muestra su luz.
+
+`PATCH /api/mesas/:numero/estado` con `{ "estado": "RESERVADA" }`. Respuesta: `{ "numero": 1, "estado": "RESERVADA" }`. Un pedido nuevo marca la mesa `OCUPADA` en el backend, también si estaba reservada; liberarla es siempre manual.
 
 ### Pedidos
 
@@ -199,6 +201,7 @@ El cliente conecta al mismo origen que `VITE_API_URL`, path por defecto `/socket
 | `pedido:nuevo` | Pedido completo en español, la misma forma que `GET /api/pedidos`. |
 | `pedido:actualizado` | `{ "id": 12, "mesa": 1, "estado": "LISTO" }` |
 | `mesa:conexion` | `{ "numero": 1, "online": true }` |
+| `mesa:estado` | `{ "numero": 1, "estado": "OCUPADA" }` |
 
 ## Pruebas
 

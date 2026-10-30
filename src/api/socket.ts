@@ -1,12 +1,13 @@
 import { io, type Socket } from 'socket.io-client'
 import { URL_API, usarMock } from '../config'
-import type { ActualizacionPedido, ConexionMesa, Pedido } from '../tipos'
+import type { ActualizacionPedido, CambioEstadoMesa, ConexionMesa, Pedido } from '../tipos'
 import { alRecibirMock } from './mock'
 
 export interface EventosSocket {
   'pedido:nuevo': Pedido
   'pedido:actualizado': ActualizacionPedido
   'mesa:conexion': ConexionMesa
+  'mesa:estado': CambioEstadoMesa
 }
 
 type NombreEvento = keyof EventosSocket

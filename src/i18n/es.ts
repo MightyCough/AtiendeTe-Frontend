@@ -106,6 +106,13 @@ export const es = {
     fueraDeLinea: 'Fuera de línea',
     sinConexion: 'Sin conexión registrada',
     mesas: 'Mesas',
+    mesasAyuda: 'La luz de cada mesa muestra este estado a quien entra al local.',
+    estadoMesa: {
+      LIBRE: 'Libre',
+      OCUPADA: 'Ocupada',
+      RESERVADA: 'Reservada',
+    },
+    errorMesa: 'No se pudo cambiar el estado de la mesa. Intenta de nuevo.',
     imprimir: 'Imprimir QR',
     reiniciar: 'Reiniciar datos de demostración',
     cantidad: '{{count}} und.',

@@ -1,4 +1,4 @@
-import type { ActualizacionPedido, Categoria, Mesa, Pedido, ReporteHoy } from '../tipos'
+import { ESTADOS_MESA, type ActualizacionPedido, type CambioEstadoMesa, type Categoria, type Mesa, type Pedido, type ReporteHoy } from '../tipos'
 import { ErrorApi } from './errores'
 
 function inesperado(): never {
@@ -35,6 +35,18 @@ export function leerMesas(datos: unknown): Mesa[] {
 export function leerMesa(datos: unknown): Mesa {
   if (!esObjeto(datos) || typeof datos.numero !== 'number') inesperado()
   return datos as unknown as Mesa
+}
+
+export function leerCambioMesa(datos: unknown): CambioEstadoMesa {
+  if (
+    !esObjeto(datos) ||
+    typeof datos.numero !== 'number' ||
+    typeof datos.estado !== 'string' ||
+    !(ESTADOS_MESA as string[]).includes(datos.estado)
+  ) {
+    inesperado()
+  }
+  return datos as unknown as CambioEstadoMesa
 }
 
 function leerItems(items: unknown): void {

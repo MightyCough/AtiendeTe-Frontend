@@ -3,9 +3,11 @@ import { aCentimos, desdeCentimos, precioLinea } from '../lib/dinero'
 import { diaLocal, fechaHoyLocal } from '../lib/formato'
 import type {
   ActualizacionPedido,
+  CambioEstadoMesa,
   Categoria,
   ConexionMesa,
   CrearPedido,
+  EstadoMesa,
   EstadoPedido,
   Idioma,
   ItemPedido,
@@ -15,7 +17,7 @@ import type {
 } from '../tipos'
 import { ErrorApi } from './errores'
 
-const CLAVE_DB = 'atiendete-mock-db-v2'
+const CLAVE_DB = 'atiendete-mock-db-v3'
 const CLAVE_SIM = 'atiendete-mock-sim'
 const CANAL = 'atiendete-mock'
 
@@ -68,14 +70,14 @@ function borrarClave(clave: string): void {
 function mesasIniciales(): Mesa[] {
   const ahora = new Date().toISOString()
   return [
-    { numero: 1, online: true, ultimaConexion: ahora },
-    { numero: 2, online: true, ultimaConexion: ahora },
-    { numero: 3, online: true, ultimaConexion: ahora },
-    { numero: 4, online: false, ultimaConexion: new Date(Date.now() - 45 * 60000).toISOString() },
-    { numero: 5, online: true, ultimaConexion: ahora },
-    { numero: 6, online: true, ultimaConexion: ahora },
-    { numero: 7, online: false, ultimaConexion: null },
-    { numero: 8, online: true, ultimaConexion: ahora },
+    { numero: 1, online: true, ultimaConexion: ahora, estado: 'LIBRE' },
+    { numero: 2, online: true, ultimaConexion: ahora, estado: 'OCUPADA' },
+    { numero: 3, online: true, ultimaConexion: ahora, estado: 'OCUPADA' },
+    { numero: 4, online: false, ultimaConexion: new Date(Date.now() - 45 * 60000).toISOString(), estado: 'RESERVADA' },
+    { numero: 5, online: true, ultimaConexion: ahora, estado: 'OCUPADA' },
+    { numero: 6, online: true, ultimaConexion: ahora, estado: 'LIBRE' },
+    { numero: 7, online: false, ultimaConexion: null, estado: 'LIBRE' },
+    { numero: 8, online: true, ultimaConexion: ahora, estado: 'LIBRE' },
   ]
 }
 
@@ -296,7 +298,8 @@ export async function crearPedidoMock(cuerpo: CrearPedido): Promise<Pedido> {
     throw new ErrorApi(400, 'El pedido no tiene productos')
   }
   const db = leerDb()
-  if (!db.mesas.some((mesa) => mesa.numero === cuerpo.mesa)) {
+  const mesa = db.mesas.find((candidata) => candidata.numero === cuerpo.mesa)
+  if (!mesa) {
     throw new ErrorApi(404, 'Mesa no encontrada')
   }
   const baseItem = db.pedidos.reduce(
@@ -326,9 +329,28 @@ export async function crearPedidoMock(cuerpo: CrearPedido): Promise<Pedido> {
   }
   db.seq += 1
   db.pedidos.push(pedido)
+  // Igual que el backend: un pedido nuevo ocupa la mesa, también si estaba reservada.
+  const ocupada = mesa.estado !== 'OCUPADA'
+  if (ocupada) mesa.estado = 'OCUPADA'
   guardarDb(db)
   emitir('pedido:nuevo', pedido)
+  if (ocupada) {
+    const aviso: CambioEstadoMesa = { numero: mesa.numero, estado: mesa.estado }
+    emitir('mesa:estado', aviso)
+  }
   return pedido
+}
+
+export async function cambiarEstadoMesaMock(numero: number, estado: EstadoMesa): Promise<CambioEstadoMesa> {
+  await esperar(180)
+  const db = leerDb()
+  const mesa = db.mesas.find((item) => item.numero === numero)
+  if (!mesa) throw new ErrorApi(404, 'Mesa no encontrada')
+  mesa.estado = estado
+  guardarDb(db)
+  const aviso: CambioEstadoMesa = { numero: mesa.numero, estado: mesa.estado }
+  emitir('mesa:estado', aviso)
+  return aviso
 }
 
 export async function pedidoMock(id: number): Promise<Pedido> {
