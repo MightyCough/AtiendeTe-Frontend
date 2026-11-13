@@ -371,6 +371,17 @@ export async function pedidosMock(params: { estado?: EstadoPedido | ''; fecha?: 
     .sort((a, b) => a.creadoEn.localeCompare(b.creadoEn))
 }
 
+/** Igual que GET /api/mesas/:numero/pedidos: pedidos de hoy de la mesa, el más reciente primero. */
+export async function pedidosMesaMock(numero: number): Promise<Pedido[]> {
+  await esperar(140)
+  const db = leerDb()
+  if (!db.mesas.some((mesa) => mesa.numero === numero)) throw new ErrorApi(404, 'Mesa no encontrada')
+  const hoy = fechaHoyLocal()
+  return db.pedidos
+    .filter((pedido) => pedido.mesa === numero && diaLocal(pedido.creadoEn) === hoy)
+    .sort((a, b) => b.creadoEn.localeCompare(a.creadoEn))
+}
+
 export async function cambiarEstadoMock(id: number, estado: EstadoPedido): Promise<ActualizacionPedido> {
   await esperar(180)
   const db = leerDb()

@@ -32,7 +32,7 @@ export function ErrorMesa({
         <p className="mt-4 text-base leading-relaxed text-suave">{texto}</p>
         <Link
           to="/"
-          className="mt-6 inline-flex rounded-full bg-oliva px-5 py-3 text-sm font-semibold text-papel"
+          className="mt-6 inline-flex rounded-full bg-terracota px-5 py-3 text-sm font-semibold text-white"
         >
           {t('mesa.inicio')}
         </Link>

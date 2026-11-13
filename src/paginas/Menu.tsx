@@ -4,13 +4,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api/cliente'
 import { ErrorApi } from '../api/errores'
 import { useEvento } from '../hooks/useEvento'
+import { usePedidosMesa } from '../hooks/usePedidosMesa'
 import { agregarLinea, cambiarCantidad, quitarLinea, sincronizarNombres, totalCarrito } from '../lib/carrito'
 import { interpretarMesa } from '../lib/mesa'
+import { contarActivos } from '../lib/pedidosMesa'
+import { guardarPropio } from '../lib/pedidosPropios'
 import type { Categoria, LineaCarrito, Mesa, Producto } from '../tipos'
 import { CarritoPanel } from './menu/CarritoPanel'
 import { Carta } from './menu/Carta'
 import { DetalleProducto } from './menu/DetalleProducto'
 import { ErrorMesa } from './menu/ErrorMesa'
+import { PedidosMesaPanel } from './menu/PedidosMesaPanel'
 
 function claveCarrito(mesa: number): string {
   return `atiendete-carrito-${mesa}`
@@ -49,6 +53,8 @@ function ExperienciaMesa({ numero }: { numero: number }) {
   const [carritoAbierto, setCarritoAbierto] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [errorEnvio, setErrorEnvio] = useState(false)
+  const [pedidosAbierto, setPedidosAbierto] = useState(false)
+  const { pedidos: pedidosMesa, numeros: numerosPedidos, error: errorPedidos, recargar: recargarPedidos } = usePedidosMesa(numero)
 
   useEffect(() => {
     document.title = `${t('menu.carta')} · AtiendeTe`
@@ -131,7 +137,7 @@ function ExperienciaMesa({ numero }: { numero: number }) {
           <button
             type="button"
             onClick={() => setIntento((valor) => valor + 1)}
-            className="mt-4 w-fit rounded-full bg-oliva px-5 py-3 font-semibold text-papel"
+            className="mt-4 w-fit rounded-full bg-terracota px-5 py-3 font-semibold text-white"
           >
             {t('comun.reintentar')}
           </button>
@@ -159,7 +165,19 @@ function ExperienciaMesa({ numero }: { numero: number }) {
         total={total}
         onAbrir={setProducto}
         onCarrito={() => setCarritoAbierto(true)}
+        pedidosHoy={pedidosMesa ? pedidosMesa.length : null}
+        pedidosActivos={pedidosMesa ? contarActivos(pedidosMesa) : 0}
+        onPedidos={() => setPedidosAbierto(true)}
       />
+      {pedidosAbierto && (
+        <PedidosMesaPanel
+          pedidos={pedidosMesa}
+          numeros={numerosPedidos}
+          error={errorPedidos}
+          onReintentar={recargarPedidos}
+          onCerrar={() => setPedidosAbierto(false)}
+        />
+      )}
       {producto && (
         <DetalleProducto
           producto={producto}
@@ -205,6 +223,8 @@ function ExperienciaMesa({ numero }: { numero: number }) {
                 })),
               })
               .then((pedido) => {
+                // Este celular recuerda su pedido: así lo ve como "Tu pedido N" y nadie más lo ve en su lista.
+                guardarPropio(pedido.id, numero)
                 sessionStorage.removeItem(claveCarrito(numero))
                 setLineas([])
                 navigate(`/pedido/${pedido.id}`)

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { FotoProducto } from '../../componentes/FotoProducto'
+import { IconoMas } from '../../componentes/Iconos'
 import { Marca } from '../../componentes/Marca'
 import { formatearSoles } from '../../lib/dinero'
 import type { Categoria, Mesa, Producto } from '../../tipos'
@@ -13,6 +14,9 @@ export function Carta({
   total,
   onAbrir,
   onCarrito,
+  pedidosHoy,
+  pedidosActivos,
+  onPedidos,
 }: {
   mesa: Mesa
   categorias: Categoria[]
@@ -22,6 +26,10 @@ export function Carta({
   total: number
   onAbrir: (producto: Producto) => void
   onCarrito: () => void
+  /** Pedidos de hoy de la mesa; null mientras cargan. */
+  pedidosHoy: number | null
+  pedidosActivos: number
+  onPedidos: () => void
 }) {
   const { t } = useTranslation()
   const categoria = categorias.find((item) => item.id === categoriaActiva) ?? categorias[0]
@@ -31,6 +39,22 @@ export function Carta({
       <header className="sticky top-0 z-20 border-b border-linea/40 bg-[#243228]/95 px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           <Marca />
+          <button
+            type="button"
+            onClick={onPedidos}
+            className="inline-flex items-center gap-2 rounded-full border border-miel/70 px-4 py-2 text-sm font-semibold text-miel"
+          >
+            {t('menu.misPedidos')}
+            {pedidosHoy != null && (
+              <span
+                className={`grid min-w-6 place-items-center rounded-full px-1.5 text-xs font-bold leading-6 ${
+                  pedidosActivos > 0 ? 'bg-terracota text-white' : 'bg-linea text-tinta-oscura'
+                }`}
+              >
+                {pedidosHoy}
+              </span>
+            )}
+          </button>
         </div>
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="font-serif text-2xl">{t('menu.mesa', { numero: mesa.numero })}</p>
@@ -50,7 +74,7 @@ export function Carta({
                 aria-selected={activa}
                 onClick={() => onCategoria(item.id)}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
-                  activa ? 'bg-oliva text-papel' : 'bg-pizarra text-tinta ring-1 ring-linea'
+                  activa ? 'bg-miel text-tinta-oscura' : 'text-tinta ring-1 ring-linea/60'
                 }`}
               >
                 {item.nombre}
@@ -72,7 +96,14 @@ export function Carta({
           >
             <div className="relative aspect-[16/10]">
               <FotoProducto productoId={producto.id} imagenUrl={producto.imagenUrl} />
-              {!producto.disponible && (
+              {producto.disponible ? (
+                <span
+                  aria-hidden
+                  className="absolute bottom-3 right-3 grid h-11 w-11 place-items-center rounded-full bg-terracota text-white shadow-lg"
+                >
+                  <IconoMas className="h-6 w-6" />
+                </span>
+              ) : (
                 <span className="absolute left-3 top-3 rounded-full bg-tinta/85 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-papel">
                   {t('menu.agotado')}
                 </span>
@@ -94,14 +125,15 @@ export function Carta({
           <button
             type="button"
             onClick={onCarrito}
-            className="flex w-full items-center justify-between rounded-full bg-oliva px-5 py-3.5 text-papel shadow-lg"
+            className="flex w-full items-center justify-between gap-3 rounded-full bg-terracota py-3 pl-3 pr-5 text-white shadow-xl ring-2 ring-papel/30"
           >
-            <span className="font-semibold">{t('menu.verPedido')}</span>
-            <span className="text-sm">
-              {unidades === 1 ? t('menu.unProducto') : t('menu.variosProductos', { count: unidades })}
-              {' · '}
-              {formatearSoles(total)}
+            <span className="inline-flex items-center gap-3">
+              <span className="grid h-8 min-w-8 place-items-center rounded-full bg-white px-2 text-sm font-bold tabular-nums text-terracota-oscuro">
+                {unidades}
+              </span>
+              <span className="text-base font-semibold">{t('menu.verPedido')}</span>
             </span>
+            <span className="font-semibold tabular-nums">{formatearSoles(total)}</span>
           </button>
         </div>
       )}
