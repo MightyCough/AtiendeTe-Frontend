@@ -49,7 +49,7 @@ export function DetalleProducto({
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-tinta/45 sm:items-center" onClick={onCerrar}>
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 sm:items-center" onClick={onCerrar}>
       <div
         role="dialog"
         aria-modal="true"
@@ -80,29 +80,6 @@ export function DetalleProducto({
             <p className="rounded-2xl bg-tinta px-3 py-2 text-sm font-semibold text-papel">{t('menu.agotado')}</p>
           )}
 
-          <div>
-            <p className="text-sm font-semibold">{t('menu.cantidad')}</p>
-            <div className="mt-2 inline-flex items-center gap-3 rounded-full bg-crema px-2 py-1">
-              <button
-                type="button"
-                aria-label={t('menu.disminuir')}
-                onClick={() => setCantidad((valor) => Math.max(1, valor - 1))}
-                className="grid h-10 w-10 place-items-center rounded-full bg-pizarra"
-              >
-                <IconoMenos />
-              </button>
-              <span className="w-6 text-center font-semibold tabular-nums">{cantidad}</span>
-              <button
-                type="button"
-                aria-label={t('menu.aumentar')}
-                onClick={() => setCantidad((valor) => Math.min(20, valor + 1))}
-                className="grid h-10 w-10 place-items-center rounded-full bg-pizarra"
-              >
-                <IconoMas />
-              </button>
-            </div>
-          </div>
-
           {producto.adicionales.length > 0 && (
             <fieldset>
               <legend className="text-sm font-semibold">{t('menu.adicionales')}</legend>
@@ -117,7 +94,7 @@ export function DetalleProducto({
                       aria-pressed={activo}
                       onClick={() => alternar(extras, extra.id, setExtras)}
                       className={`rounded-full px-3 py-2 text-sm font-medium ${
-                        activo ? 'bg-terracota text-white' : 'bg-crema text-tinta'
+                        activo ? 'bg-terracota text-white' : 'bg-crema text-tinta ring-1 ring-linea/40'
                       }`}
                     >
                       {extra.nombre} · {formatearSoles(extra.precioExtra)}
@@ -142,7 +119,7 @@ export function DetalleProducto({
                       aria-pressed={activo}
                       onClick={() => alternar(sin, ingrediente.id, setSin)}
                       className={`rounded-full px-3 py-2 text-sm font-medium ${
-                        activo ? 'bg-oliva text-papel' : 'bg-crema text-tinta'
+                        activo ? 'bg-miel text-tinta-oscura' : 'bg-crema text-tinta ring-1 ring-linea/40'
                       }`}
                     >
                       {t('pedido.sin')} {ingrediente.nombre}
@@ -165,7 +142,34 @@ export function DetalleProducto({
             />
           </label>
         </div>
-        <div className="border-t border-linea px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <div className="flex items-center gap-3 border-t border-linea px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div
+            role="group"
+            aria-label={t('menu.cantidad')}
+            className="inline-flex shrink-0 items-center rounded-full bg-crema p-1 ring-1 ring-linea/50"
+          >
+            <button
+              type="button"
+              aria-label={t('menu.disminuir')}
+              disabled={cantidad <= 1}
+              onClick={() => setCantidad((valor) => Math.max(1, valor - 1))}
+              className="grid h-11 w-11 place-items-center rounded-full bg-pizarra disabled:opacity-40"
+            >
+              <IconoMenos />
+            </button>
+            <span className="w-8 text-center text-lg font-semibold tabular-nums" aria-live="polite">
+              {cantidad}
+            </span>
+            <button
+              type="button"
+              aria-label={t('menu.aumentar')}
+              disabled={cantidad >= 20}
+              onClick={() => setCantidad((valor) => Math.min(20, valor + 1))}
+              className="grid h-11 w-11 place-items-center rounded-full bg-pizarra disabled:opacity-40"
+            >
+              <IconoMas />
+            </button>
+          </div>
           <button
             type="button"
             disabled={!producto.disponible}
@@ -177,7 +181,7 @@ export function DetalleProducto({
                 nota,
               })
             }
-            className="w-full rounded-full bg-terracota px-5 py-3.5 text-base font-semibold text-white disabled:opacity-50"
+            className="min-w-0 flex-1 whitespace-nowrap rounded-full bg-terracota px-3 py-3.5 text-base font-semibold text-white disabled:opacity-50"
           >
             {t('menu.agregarPor', { total: formatearSoles(total) })}
           </button>

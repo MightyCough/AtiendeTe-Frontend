@@ -29,6 +29,7 @@ import {
   mesaMock,
   mesasMock,
   pedidoMock,
+  pedidosMesaMock,
   pedidosMock,
   reporteHoyMock,
 } from './mock'
@@ -118,6 +119,11 @@ export const api = {
     const datos = usarMock
       ? await pedidosMock(params)
       : await solicitar<unknown>(`/api/pedidos${query({ estado: params.estado, fecha: params.fecha })}`)
+    return leerPedidos(datos)
+  },
+  /** Pedidos de hoy de una mesa, el más reciente primero. */
+  async pedidosMesa(numero: number): Promise<Pedido[]> {
+    const datos = usarMock ? await pedidosMesaMock(numero) : await solicitar<unknown>(`/api/mesas/${numero}/pedidos`)
     return leerPedidos(datos)
   },
   async cambiarEstado(id: number, estado: EstadoPedido): Promise<ActualizacionPedido> {

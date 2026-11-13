@@ -40,7 +40,7 @@ export function CarritoPanel({
   }, [onCerrar])
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-tinta/45 sm:items-center" onClick={onCerrar}>
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 sm:items-center" onClick={onCerrar}>
       <div
         role="dialog"
         aria-modal="true"
@@ -121,7 +121,11 @@ export function CarritoPanel({
           >
             {enviando ? t('menu.enviando') : t('menu.confirmar')}
           </button>
-          <button type="button" onClick={onCerrar} className="mt-2 w-full py-2 text-sm font-semibold text-suave">
+          <button
+            type="button"
+            onClick={onCerrar}
+            className="mt-2 w-full rounded-full border border-miel/70 py-3 text-sm font-semibold text-miel"
+          >
             {t('menu.seguir')}
           </button>
         </div>
